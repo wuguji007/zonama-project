@@ -165,8 +165,8 @@ const CardSwiper = () => {
                         }}
                     >
                         {cardSwiperData.map((card) => (
-                        <SwiperSlide key={card.id} className="swiper-slide">
-                            <div className="card h-auto border-0 p-3 p-md-5">
+                        <SwiperSlide key={card.id} className="swiper-slide border-3 border-primary">
+                            <div className="card card-hover h-auto p-3 p-md-5">
                                 <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
                                 <div className="card-body p-0 mb-4">
                                     <h5 className="card-title fw-bold fs-5 text-primary-950 mb-20">{card.title}</h5>
@@ -543,12 +543,12 @@ export default function Home() {
             {/* Menu 商品類別選單 */}
             <div className="container category-container">
                 <div className="container-fluid px-0">
-                    <div className="d-flex justify-content-around align-items-center p-0 mb-0">
-                        <div className="btn-group position-relative">
+                    <div className="d-flex justify-content-between align-items-center p-0 mb-0">
+                        <div className="btn-group position-relative me-1">
                             <button
                                 onClick={() => setShowMenu(!showMenu)}
                                 type="button"
-                                className="btn border-primary border-1 rounded-1 my-1 me-1 text-primary fw-bold category-link dropdown-btn-hover"
+                                className="btn border-primary border-1 rounded-1 my-1 text-primary fw-bold category-link dropdown-btn-hover"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
@@ -589,7 +589,7 @@ export default function Home() {
                             >
                                 <div className="p-3">
                                     {categories.map((cat) => (
-                                        <div key={cat.id}>
+                                        <div key={cat.id} className='border-bottom border-primary'>
                                             <button 
                                                 className="btn btn-link text-decoration-none w-100 text-start text-primary fw-bold d-flex justify-content-between align-items-center py-3 px-0 sidebar-hover"
                                             >
@@ -603,15 +603,15 @@ export default function Home() {
                         </div>
 
                         
-                        <ul className='d-flex flex-nowrap overflow-scroll hide-scrollbar justify-content-between align-items-center p-0 mb-0 list-unstyled'>
-                            <li className="category-text-secondary"><a href="#" className="py-3 px-6 category-link">生活用品</a></li>
-                            <li className="category-text-secondary"><a href="#" className="py-3 px-6 category-link">食品飲料</a></li>
-                            <li className="category-text-secondary"><a href="#" className="py-3 px-6 category-link">美妝保養</a></li>
-                            <li className="category-text-secondary"><a href="#" className="py-3 px-6 category-link">數位家電</a></li>
-                            <li className="category-text-secondary"><a href="#" className="py-3 px-6 category-link">嬰幼兒</a></li>
-                            <li className="category-text-secondary"><a href="#" className="py-3 px-6 category-link">寵物</a></li>
-                            <li className="category-text-secondary"><a href="#" className="py-3 px-6 category-link">室內居家</a></li>
-                            <li className="category-text-secondary"><a href="#" className="py-3 px-6 category-link">品牌服飾</a></li>
+                        <ul className='d-flex flex-nowrap overflow-scroll hide-scrollbar justify-content-between align-items-center p-0 mb-0 list-unstyled gap-md-8 mx-md-8'>
+                            <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">生活用品</a></li>
+                            <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">食品飲料</a></li>
+                            <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">美妝保養</a></li>
+                            <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">數位家電</a></li>
+                            <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">嬰幼兒</a></li>
+                            <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">寵物</a></li>
+                            <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">室內居家</a></li>
+                            <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">品牌服飾</a></li>
                         </ul>                       
                     </div>   
                 </div>          
@@ -655,7 +655,7 @@ export default function Home() {
                                     <h2 className="text-black fw-bold bg-white">熱銷商品</h2>
                                     {/* Horizontal Line (Flex Grow to fill space) */}
                                     <div className="flex-grow-1 mx-4 bg-primary" style={{ height: '1px' }}></div>                                               
-                                    <div><Link to="/member" className="btn btn-border-primary rounded-pill py-4 px-7 fs-5 fw-bold">查看更多</Link>
+                                    <div><Link to="/" className="btn btn-border-primary rounded-pill py-4 px-7 fs-5 fw-bold">查看更多</Link>
                                     </div>
                                 </div>                   
                                 <div>
@@ -668,7 +668,7 @@ export default function Home() {
                                     <h2 className="text-black fw-bold bg-white">會員專屬優惠</h2>
                                     {/* Horizontal Line (Flex Grow to fill space) */}
                                     <div className="flex-grow-1 mx-4 bg-primary" style={{ height: '1px' }}></div>                                               
-                                    <div><Link to="/member" className="btn btn-border-primary rounded-pill py-4 px-7 fs-5 fw-bold">查看更多</Link>
+                                    <div><Link to="/" className="btn btn-border-primary rounded-pill py-4 px-7 fs-5 fw-bold">查看更多</Link>
                                     </div>
                                 </div>                   
                                 <div>

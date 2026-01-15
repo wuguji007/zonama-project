@@ -17,17 +17,19 @@
     }   
 }
 
-.category-text-secondary a {
-    color: $secondary;
-
-    &:hover {
-    color: darken($secondary, 10%);
-    }
+.category-text-btn {
+    border-radius: 0.5rem;
 }
 
 .category-link {
+    display: block;
+    color: $secondary;
     white-space: nowrap; /* 強制不換行，這是水平滑動的關鍵 */
     overflow: hidden;
+    transition: all 0.3s ease;
+    &:hover {
+        color: darken($secondary, 30%);        
+    }
 }
 
 
@@ -135,11 +137,26 @@
 }
 
 
-
 /*商品卡片 Card*/
-.card {
-    width: 100%;
+.card-hover  {   
+
+    &:hover {
+        border: 3px $blue-400 solid;
+        box-shadow: 0 0 0 4px $blue-200;
+        transform: scale(0.96);
+        transition: transform 0.4s ease-in-out;
+    }
 }
+
+.card-img-top {
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.15);
+}
+
 
 .card-btn {
     font-size: 18px;    
