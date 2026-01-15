@@ -1,0 +1,133 @@
+@import 'bootstrap/scss/functions';
+@import 'variables';
+@import 'bootstrap/scss/bootstrap';
+@import '../assets/header.scss';
+@import '../assets/footer';
+@import '../assets/hero-swiper.scss';
+@import '../assets/homepage.scss';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Noto Sans TC", sans-serif;
+  line-height: 1.2;
+  letter-spacing: 2px;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+h1 {
+  letter-spacing: 5px;
+}
+
+.py-80 {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.py-120 {
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
+
+.fs-20 {
+  font-size: 20px;
+}
+
+.container {
+  width: 1296px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 768px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 568px) {
+  .container {
+    width: 568px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 378px) {
+  .container {
+    width: 375px;
+    margin: 0 auto;
+  }
+}
+
+/*白底按鈕樣式*/
+.btn-border-primary {
+  background-color: white;
+  border: 1px $primary solid;
+  color: $primary;
+
+  &:hover {
+    background-color: $primary;
+    color: white;
+  }
+}
+
+
+/*帶線條標題*/
+.title-line{
+  font-size: 40px;
+  background-color: $blue-900;
+  z-index: 1;
+  padding-right: 20px;
+}
+
+.swiper-container {
+  overflow: hidden;
+}
+
+
+/*swiper卡片高度一致*/
+.swiper-slide {
+  height: auto;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Swiper Navigation Styling (Overriding default styles) */
+.swiper-button-prev, .swiper-button-next {
+  color: $primary; /* arrow color */
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  padding: 20px;           
+}
+
+.swiper-navigation-icon {
+  fill: none;
+  stroke: $primary;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  border-radius: 100%;
+}
+
+@media (max-width: 768px) {
+  .swiper-button-prev, .swiper-button-next, .swiper-navigation-icon {
+    display: none;
+  }
+}
+

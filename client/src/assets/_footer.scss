@@ -1,0 +1,39 @@
+.footer {
+    position: relative;
+}
+
+.footer-info {
+    font-size: 14px;
+}
+
+.footer-text ul li{
+    margin-bottom: 16px;
+}
+
+.footer-text ul li a{
+    color: white;
+
+    &:hover {
+        color: darken(white, 30%);
+    }
+}
+
+.footer-text-right {
+    min-width: 180px;
+}
+
+.back-to-top-btn {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    color: $primary;
+    background-color: $blue-50;
+    padding: 12px;
+    right: 64px;
+    bottom: 64px;
+    
+    &:hover {
+        background-color: $primary;
+        color: white;
+    }
+}

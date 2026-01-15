@@ -1,0 +1,61 @@
+/* LOGO-size */
+.w-240 {
+  width: 240px;
+}
+
+.h-62 {
+  height: 62px;
+}
+
+/* 搜尋欄 */
+.search-bar {
+  position: relative;
+  .search {   
+    margin-left: 12px;
+    }
+
+  .search-btn {
+    margin-right: 8px;
+    position: absolute;
+    left: 0;
+  }
+}
+
+
+.nav-link {
+    color: $primary;
+    &:hover {
+      color: white;
+      background-color: $primary;      
+    }
+}
+
+.loggin-btn {
+  width: 100%;
+  font-size: 14px;
+  white-space: nowrap; /* 強制不換行，這是水平滑動的關鍵 */
+}
+
+@media (max-width: 768px) {
+  .nav-link {
+  width: 100%;
+  font-size: 10px;
+  }
+
+  .loggin-btn {
+      min-width: 100%;
+  }
+}
+
+@media (max-width: 568px) {
+  .navbar {
+    padding: 0px;
+  }
+
+  .loggin-btn {
+      min-width: 100%;
+      font-size: 14px;
+  }
+}
+
+

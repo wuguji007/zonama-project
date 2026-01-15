@@ -1,0 +1,213 @@
+/* 隱藏 Chrome, Safari, Opera 的捲軸 */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+/* 隱藏 IE, Edge, Firefox 的捲軸 */
+.hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+
+/* 類別欄 */
+@media (max-width: 768px) {
+    .category-container {
+        border-top: 1px $gray-200 solid;
+        border-bottom: 1px $gray-200 solid;;
+    }   
+}
+
+.category-text-secondary a {
+    color: $secondary;
+
+    &:hover {
+    color: darken($secondary, 10%);
+    }
+}
+
+.category-link {
+    white-space: nowrap; /* 強制不換行，這是水平滑動的關鍵 */
+    overflow: hidden;
+}
+
+
+
+/* 所有類別下拉選單 */
+.dropdown-menu {
+    width: 178px; 
+}
+
+.dropdown-menu li {
+    &:hover {
+        background: $blue-50;
+        cursor: pointer;
+    }
+}
+
+.dropdown-item {
+    &:hover {
+        background-color: transparent;
+        cursor: pointer;
+    }
+}
+
+.dropdown-btn-hover {
+    &:hover {
+        background-color: $primary;
+        color: $white !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .dropdown-menu {
+        display: none;
+    }
+
+    .dropdown-menu ul li {
+        border-bottom: 1px $primary solid;
+    }
+}
+
+
+.position-relative {
+    position: relative;
+}
+
+.position-fixed {
+    position: fixed;
+}
+
+.position-absolute {
+    position: absolute;
+}
+
+.top-0 {
+    top: 0;
+}
+
+.start-0 {
+    left: 0;
+}
+
+.bottom-0 {
+    bottom: 0;
+}
+
+.start-50 {
+    left: 50%;
+}
+
+.sidebar-hover {
+    &:hover {
+        background-color: $blue-50;
+        cursor: pointer;
+    }
+}
+
+.menu-container {
+    display: none;
+}
+
+@media (min-width: 768px) {
+/* Tablet: Dropdown menu */
+    .menu-container {
+        display: block;
+        position: absolute;
+        top: 100%;
+        left: 1rem;
+        width: 252px;
+        max-height: 500px;
+        border-radius: 0.5rem;
+        margin-top: 0.5rem;
+    } 
+}
+
+@media (max-width: 767px) {
+    /* Mobile: Fixed sidebar */
+    .menu-container {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 252px;
+        height: 100%;
+    }
+}
+
+
+
+/*商品卡片 Card*/
+.card {
+    width: 100%;
+}
+
+.card-btn {
+    font-size: 18px;    
+}
+
+.card-title {
+    margin-bottom: 20px;
+}
+
+
+@media (max-width: 768px) {
+    .card {
+        min-width: 200px;
+        height: 340px;
+    }  
+
+    .card-title {
+        margin-bottom: 8px;
+    }
+
+    .card-btn {
+        padding: 12px 51px;
+        font-size: 14px;    
+    }
+}
+
+.promo-img {
+    width: 100%;
+    height: auto;
+    border-radius: 1rem;
+}
+
+@media (max-width: 768px) {
+    .promo-img {
+        display: block;
+        height: 240px;
+        object-fit: cover;        /* 圖片適配方式 */
+        object-position: center center;  /* 裁切焦點位置 */
+    }
+}
+
+
+/* Grid 容器外框 */
+.grid-container-wrapper {
+    border-radius: 16px;       /* 容器圓角 */
+    overflow: hidden;          /* 裁切內部卡片的直角 */
+    border: 1px solid $gray-100; /* 最外層邊框 */
+    background-color: $blue-50; /* 避免邊框間隙透出背景 */
+}
+
+/* Grid Card 自定義樣式 */
+.grid-card {
+    border: 1px solid #dee2e6;
+    border-radius: 0; /* 內部卡片維持直角 */
+    transition: all 0.3s ease;
+    height: auto;
+    background: white;
+
+    /* 負 Margin 技巧：讓卡片邊框重疊，形成單線格線效果 */
+    margin-bottom: -1px; 
+    margin-right: -1px;
+}
+
+/* 懸停效果 */
+.grid-card:hover {
+    z-index: 10; 
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-color: transparent; /* 懸停時隱藏邊框，改用陰影 */
+    position: relative;
+}
