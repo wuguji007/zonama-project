@@ -25,13 +25,14 @@
 
 /* 當加入 .visible class 時顯示 */
 .back-to-top-btn.visible {
-    opacity: 1;
+    opacity: 0.9;
     visibility: visible;
     transform: translateY(0);
     stroke: $primary;
 }
 
 .back-to-top-btn:hover {
+    opacity: 0.7;
     background-color: $blue-300;
     transform: translateY(-5px); /* hover 時輕微上浮 */
     box-shadow: 0 6px 16px rgba(0,0,0,0.2);

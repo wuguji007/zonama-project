@@ -167,7 +167,7 @@ const CardSwiper = () => {
                     >
                         {cardSwiperData.map((card) => (
                         <SwiperSlide key={card.id} className="swiper-slide">
-                            <div className="card h-auto border-0 p-3 p-md-5">
+                            <div className="card product-card h-auto rounded-4 p-3 p-md-5">
                                 <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
                                 <div className="card-body p-0 mb-4">
                                     <h5 className="card-title fw-bold fs-5 text-primary-950 mb-20">{card.title}</h5>
@@ -204,7 +204,7 @@ const GreyCardSwiper = () => {
                     >
                         {cardSwiperData.map((card) => (
                         <SwiperSlide key={card.id} className="swiper-slide">
-                            <div className="card bg-gray-50 h-auto border-0 p-3 p-md-5">
+                            <div className="card product-card-gray h-auto rounded-4 border-0 p-3 p-md-5">
                                 <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
                                 <div className="card-body p-0 mb-4">
                                     <h5 className="card-title fw-bold fs-5 text-primary-950">{card.title}</h5>
@@ -316,114 +316,6 @@ const CardCarousel = () => {
 
     return (
         <div className="d-flex flex-column h-100">
-            
-            <style>{`
-            /* 覆蓋 Bootstrap Carousel 預設樣式 */
-            .carousel-item {
-                transition: transform 0.6s ease-in-out;
-            }
-            
-            /* 導航按鈕樣式 */
-            .nav-btn {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                z-index: 10;
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
-                border: 1px solid #eee;
-                background: white;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-            .nav-btn svg {
-                stroke: #1F749B;
-            }
-            .nav-btn:hover {
-                background: #1F749B;
-                border-color: #1F749B; //#2c3e50;
-            }
-            .nav-btn:hover svg {
-                stroke: white;
-            }
-            .nav-prev { left: -24px; }
-            .nav-next { right: -24px; }
-            
-            @media (max-width: 768px) {
-            .nav-btn { display: none; }
-            }
-
-            /* 產品卡片樣式 - 配合 g-0 進行微調 */
-            .product-card {
-                border-radius: 0; /* 內部卡片維持直角 */
-                overflow: hidden;
-            }
-            
-            .btn-add-cart {
-                background-color: #2c3e50;
-                border: none;
-            }
-            .btn-add-cart:hover {
-                background-color: #1a252f;
-            }
-
-
-            /* 分頁圓點 (Indicators) 自定義 */
-            .carousel-indicators {
-                position: static; /* 移出圖片區域 */
-                margin-top: 10px;
-                margin-bottom: 0;
-            }
-
-            /* Bullets 圓點樣式 */
-            .carousel-indicators button {
-                background-color: #EFFAFC; /* Inactive: #EFFAFC背景色 */
-                width: 12px;
-                height: 12px;
-                border-radius: 50%;
-                border: 1px #1F749B solid;
-                margin: 0 6px;
-                padding: 0 0;
-                transition: all 0.3s ease;
-                opacity: 1; /* 確保顏色不被 Bootstrap 預設的 opacity 覆蓋 */
-            }
-            
-            .carousel-indicators button.active {
-                background-color: #1F749B; /* Active: 深色填滿 */
-                width: 12px; /* 保持圓形，不拉長 */
-            }
-
-            /* Grid 容器外框 */
-            .grid-container-wrapper {
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                border-radius: 16px;       /* 容器圓角 */
-                overflow: hidden;          /* 裁切內部卡片的直角 */
-                border: 1px solid #dee2e6; /* 最外層邊框 */
-                background-color: #dee2e6; /* 避免邊框間隙透出背景 */
-            }
-
-
-            /* Grid Card 自定義樣式 */
-            .grid-card {
-                border: 1px solid #dee2e6;
-                border-radius: 0; /* 內部卡片維持直角 */
-                transition: all 0.3s ease;
-                height: 100%;
-                background: white;
-            
-                /* 負 Margin 技巧：讓卡片邊框重疊，形成單線格線效果 */
-                margin-bottom: -1px; 
-                margin-right: -1px;
-            }
-            `}</style>
-
             <div className="position-relative px-0 h-100">
                 
                 {/* 輪播主體 */}
@@ -454,8 +346,7 @@ const CardCarousel = () => {
                     >
                     <ChevronRight size={24} color="#333" />
                     </button>
-
-                        
+                       
                     <div className="carousel-inner h-100">
                         {slides.map((slideProducts, slideIndex) => (
                             <div 
@@ -493,7 +384,7 @@ const CardCarousel = () => {
                                                                         <span className="text-primary-950 fw-bold fs-4">NT${product.price}</span>
                                                                         <del className='text-gray-300 fs-6 fs-md-5 mb-2'>${product.origin_price}</del>
                                                                     </div>
-                                                                    <button className="btn bg-primary text-white fw-bold btn-sm rounded-pill w-100 py-3 d-flex align-items-center shadow-sm d-none d-md-block" style={{ fontSize: '0.8rem' }}>
+                                                                    <button className="btn btn-add-cart text-white fw-bold btn-sm rounded-pill w-100 py-3 d-flex align-items-center shadow-sm d-none d-md-block" style={{ fontSize: '0.8rem' }}>
                                                                         加入購物車
                                                                     </button>
                                                                     {/* <button className="btn bg-primary text-white btn-sm rounded-circle px-2 py-2 d-flex align-items-center shadow-sm d-block d-md-none" style={{ fontSize: '0.8rem' }}>
@@ -531,7 +422,6 @@ const CardCarousel = () => {
     );
 };
 //精選推薦區-網格卡片輪播元件
-
 
 
 
@@ -659,7 +549,7 @@ export default function Home() {
                                     <h2 className="title-line text-black fw-bold bg-white">熱銷商品</h2>
                                     {/* Horizontal Line (Flex Grow to fill space) */}
                                     <div className="flex-grow-1 mx-4 bg-primary" style={{ height: '1px' }}></div>                                               
-                                    <div><Link to="/member" className="btn btn-border-primary rounded-pill view-more-btn py-3 px-5 py-md-4 px-md-7 fw-bold">查看更多</Link>
+                                    <div><Link to="/" className="btn btn-border-primary rounded-pill view-more-btn py-3 px-5 py-md-4 px-md-7 fw-bold">查看更多</Link>
                                     </div>
                                 </div>                   
                                 <div>
@@ -672,7 +562,7 @@ export default function Home() {
                                     <h2 className="title-line text-black fw-bold bg-white">會員專屬優惠</h2>
                                     {/* Horizontal Line (Flex Grow to fill space) */}
                                     <div className="flex-grow-1 mx-4 bg-primary" style={{ height: '1px' }}></div>                                               
-                                    <div><Link to="/member" className="btn btn-border-primary rounded-pill view-more-btn py-3 px-5 py-md-4 px-md-7 fw-bold">查看更多</Link>
+                                    <div><Link to="/" className="btn btn-border-primary rounded-pill view-more-btn py-3 px-5 py-md-4 px-md-7 fw-bold">查看更多</Link>
                                     </div>
                                 </div>                   
                                 <div>
