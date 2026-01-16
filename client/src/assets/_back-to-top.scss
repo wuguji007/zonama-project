@@ -1,0 +1,43 @@
+/* Back to Top 樣式與動畫效果 */
+.back-to-top-btn {
+    position: fixed;
+    bottom: 64px;
+    right: 64px;
+    width: 64px;
+    height: 64px;
+    background-color: $blue-50;
+    color: $primary;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1030;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    
+    /* 預設隱藏並稍微往下移，製造滑入效果 */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease-in-out;
+}
+
+/* 當加入 .visible class 時顯示 */
+.back-to-top-btn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    stroke: $primary;
+}
+
+.back-to-top-btn:hover {
+    background-color: $blue-300;
+    transform: translateY(-5px); /* hover 時輕微上浮 */
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    stroke: $primary;
+}
+
+.back-to-top-btn svg, .back-to-top-btn:hover svg {
+    stroke: $primary;
+}

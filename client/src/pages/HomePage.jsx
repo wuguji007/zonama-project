@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from "react-router-dom"
 import HeroSwiper from "../components/HeroSwiper.jsx"
+import BackToTop from '../components/BackToTop.jsx';
 import { getImageUrl } from "../utils/imageHelper.js"
 import { ChevronLeft, ChevronRight, ShoppingCart, Cat, CookingPot } from 'lucide-react';
 
@@ -150,23 +151,23 @@ const CardSwiper = () => {
     return (
         <>
             <div className="row">
-                <div className="col-12">
+                <div className="col-12 pe-0 px-md-4">
                     <Swiper
                         slidesPerView={1.3}
-                        spaceBetween={12}
+                        spaceBetween={6}
                         modules={[Navigation]}
                         navigation={true} 
                         loop={true}
                         breakpoints={{
-                        378: { slidesPerView: 1.3, spaceBetween: 12 },
-                        576: { slidesPerView: 2.2, spaceBetween: 12 },
-                        768: { slidesPerView: 3, spaceBetween: 20 },
-                        1024: { slidesPerView: 4, spaceBetween: 24 }
+                        378: { slidesPerView: 1.3, spaceBetween: 6 },
+                        576: { slidesPerView: 2.2, spaceBetween: 6 },
+                        768: { slidesPerView: 3, spaceBetween: 12 },
+                        1024: { slidesPerView: 4, spaceBetween: 12 }
                         }}
                     >
                         {cardSwiperData.map((card) => (
-                        <SwiperSlide key={card.id} className="swiper-slide border-3 border-primary">
-                            <div className="card card-hover h-auto p-3 p-md-5">
+                        <SwiperSlide key={card.id} className="swiper-slide">
+                            <div className="card h-auto border-0 p-3 p-md-5">
                                 <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
                                 <div className="card-body p-0 mb-4">
                                     <h5 className="card-title fw-bold fs-5 text-primary-950 mb-20">{card.title}</h5>
@@ -188,17 +189,17 @@ const GreyCardSwiper = () => {
     return (
         <>
             <div className="row">
-                <div className="col-12">
+                <div className="col-12 pe-0 px-md-4">
                     <Swiper
                         slidesPerView={1.3}
-                        spaceBetween={12}
+                        spaceBetween={6}
                         modules={[Navigation]}
                         navigation={true} 
                         loop={true}
                         breakpoints={{
-                        576: { slidesPerView: 2.2, spaceBetween: 12 },
-                        768: { slidesPerView: 3, spaceBetween: 20 },
-                        1024: { slidesPerView: 4, spaceBetween: 24 }
+                        576: { slidesPerView: 2.2, spaceBetween: 6 },
+                        768: { slidesPerView: 3, spaceBetween: 12 },
+                        1024: { slidesPerView: 4, spaceBetween: 12 }
                         }}
                     >
                         {cardSwiperData.map((card) => (
@@ -314,7 +315,7 @@ const CardCarousel = () => {
     };
 
     return (
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column h-100">
             
             <style>{`
             /* 覆蓋 Bootstrap Carousel 預設樣式 */
@@ -340,9 +341,12 @@ const CardCarousel = () => {
                 cursor: pointer;
                 transition: all 0.2s ease;
             }
+            .nav-btn svg {
+                stroke: #1F749B;
+            }
             .nav-btn:hover {
-                background: #2c3e50;
-                border-color: $primary; //#2c3e50;
+                background: #1F749B;
+                border-color: #1F749B; //#2c3e50;
             }
             .nav-btn:hover svg {
                 stroke: white;
@@ -376,7 +380,7 @@ const CardCarousel = () => {
                 margin-bottom: 0;
             }
 
-            /* 修正選擇器與圓點樣式 */
+            /* Bullets 圓點樣式 */
             .carousel-indicators button {
                 background-color: #EFFAFC; /* Inactive: #EFFAFC背景色 */
                 width: 12px;
@@ -420,12 +424,12 @@ const CardCarousel = () => {
             }
             `}</style>
 
-            <div className="position-relative px-0">
+            <div className="position-relative px-0 h-100">
                 
                 {/* 輪播主體 */}
                 <div
                     id="productGridCarousel"
-                    className="carousel-slide"
+                    className="carousel-slide h-100"
                     onTouchStart={onTouchStart}
                     onTouchMove={onTouchMove}
                     onTouchEnd={onTouchEnd}
@@ -452,14 +456,14 @@ const CardCarousel = () => {
                     </button>
 
                         
-                    <div className="carousel-inner">
+                    <div className="carousel-inner h-100">
                         {slides.map((slideProducts, slideIndex) => (
                             <div 
                             key={slideIndex} 
-                            className={`carousel-item ${slideIndex === activeIndex ? 'active' : ''}`}
+                            className={`carousel-item h-100 ${slideIndex === activeIndex ? 'active' : ''}`}
                             >
                                 
-                                <div className="grid-container-wrapper"> 
+                                <div className="grid-container-wrapper h-100"> 
                                     {/* Grid 結構: g-0 (No Gutters) */}
                                     <div className="row g-0">
                                         {slideProducts.map((product) => (
@@ -480,21 +484,21 @@ const CardCarousel = () => {
                                                             </div>
                                                         </div>
                                                                 
-                                                        <div className="col-6 d-flex flex-column flex-grow-1">
+                                                        <div className="col-6 d-flex flex-column">
                                                             <div className="card-body d-flex flex-column p-3">                              
-                                                                <h6 className="card-title fw-bold fs-5 fs-md-4 mb-1">{product.title}</h6>
+                                                                <h6 className="card-title fw-bold fs-5 fs-md-4 mb-1">{product.title}</h6 >
                                                                 
-                                                                <div className="d-flex justify-content-between align-items-end align-items-md-start flex-column align-items-start mt-auto pt-2 border-top">
-                                                                    <div className="d-flex flex-column align-items-end align-items-md-start">
-                                                                        <span className="text-primary-950 fs-4">NT${product.price}</span>
+                                                                <div className="d-flex justify-content-between align-items-start align-items-md-start flex-column align-items-start mt-auto pt-2 border-top">
+                                                                    <div className="d-flex flex-column align-items-start align-items-md-start">
+                                                                        <span className="text-primary-950 fw-bold fs-4">NT${product.price}</span>
                                                                         <del className='text-gray-300 fs-6 fs-md-5 mb-2'>${product.origin_price}</del>
                                                                     </div>
                                                                     <button className="btn bg-primary text-white fw-bold btn-sm rounded-pill w-100 py-3 d-flex align-items-center shadow-sm d-none d-md-block" style={{ fontSize: '0.8rem' }}>
                                                                         加入購物車
                                                                     </button>
-                                                                    <button className="btn bg-primary text-white btn-sm rounded-circle px-2 py-2 d-flex align-items-center shadow-sm d-block d-md-none" style={{ fontSize: '0.8rem' }}>
+                                                                    {/* <button className="btn bg-primary text-white btn-sm rounded-circle px-2 py-2 d-flex align-items-center shadow-sm d-block d-md-none" style={{ fontSize: '0.8rem' }}>
                                                                     <ShoppingCart size={20} className="" />
-                                                                    </button>
+                                                                    </button> */}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -632,7 +636,7 @@ export default function Home() {
             {/* Flash sale 限時搶購 */}
             <section className="flash-sale bg-primary-900 p-0">
                 <div className="container py-7 py-md-120">
-                    <h4 className="text-primary-200 fw-bold fs-4 mb-3">HURRY UP !</h4>
+                    <h4 className="text-primary-200 fw-bold sales-pitch mb-1 mb-md-3">HURRY UP !</h4>
                     <div className="d-flex justify-content-between align-items-center mb-7">
                         <h2 className='title-line text-white fw-bold'>限時搶購</h2>
                         {/* Horizontal Line (Flex Grow to fill space) */}
@@ -650,12 +654,12 @@ export default function Home() {
                     <div className="row">
                         <div className="col-12 mb-10">
                             <div className="w-100 mb-8">
-                                <h4 className="text-primary fw-bold fs-4 mb-3">HOT</h4>
+                                <h4 className="text-primary fw-bold sales-pitch mb-1 mb-md-3">HOT</h4>
                                 <div className="d-flex justify-content-between align-items-center mb-7">
-                                    <h2 className="text-black fw-bold bg-white">熱銷商品</h2>
+                                    <h2 className="title-line text-black fw-bold bg-white">熱銷商品</h2>
                                     {/* Horizontal Line (Flex Grow to fill space) */}
                                     <div className="flex-grow-1 mx-4 bg-primary" style={{ height: '1px' }}></div>                                               
-                                    <div><Link to="/" className="btn btn-border-primary rounded-pill py-4 px-7 fs-5 fw-bold">查看更多</Link>
+                                    <div><Link to="/member" className="btn btn-border-primary rounded-pill view-more-btn py-3 px-5 py-md-4 px-md-7 fw-bold">查看更多</Link>
                                     </div>
                                 </div>                   
                                 <div>
@@ -663,12 +667,12 @@ export default function Home() {
                                 </div>
                             </div>
                             <div className="w-100">
-                                <h4 className="text-primary fw-bold fs-4 mb-3">MEMBER ONLY</h4>
+                                <h4 className="text-primary fw-bold sales-pitch mb-1 mb-md-3">MEMBER ONLY</h4>
                                 <div className="d-flex justify-content-between align-items-center mb-7">
-                                    <h2 className="text-black fw-bold bg-white">會員專屬優惠</h2>
+                                    <h2 className="title-line text-black fw-bold bg-white">會員專屬優惠</h2>
                                     {/* Horizontal Line (Flex Grow to fill space) */}
                                     <div className="flex-grow-1 mx-4 bg-primary" style={{ height: '1px' }}></div>                                               
-                                    <div><Link to="/" className="btn btn-border-primary rounded-pill py-4 px-7 fs-5 fw-bold">查看更多</Link>
+                                    <div><Link to="/member" className="btn btn-border-primary rounded-pill view-more-btn py-3 px-5 py-md-4 px-md-7 fw-bold">查看更多</Link>
                                     </div>
                                 </div>                   
                                 <div>
@@ -689,26 +693,26 @@ export default function Home() {
                     <div className='mb-6 mb-md-8'>
                         <div className="bg-white d-flex justify-content-between align-items-center mb-7">
                             <div className='d-flex align-items-center m-0'>
-                                <div className='bg-primary p-4 text-white me-4'>
-                                    <Cat size={52} />
+                                <div className='bg-primary px-2 py-5 p-md-4 text-white me-2 me-md-4'>
+                                    <Cat className='title-icon' />
                                 </div>
-                                <div className="d-flex flex-column-reverse flex-md-row">
-                                    <h2 className='me-3'>寵物用品</h2>
-                                    <div className="badge rounded-pill bg-primary-100 px-4 py-2 text-primary fw-bold fs-20">精選推薦</div>
+                                <div className="d-flex flex-column-reverse align-items-center flex-md-row py-3 py-md-0">
+                                    <h2 className='me-md-3 mb-0'>寵物用品</h2>
+                                    <div className="badge promo-badge rounded-pill bg-primary-100 py-1 px-3 py-md-2 px-md-4 mb-1 mb-md-0 text-primary fw-bold">精選推薦</div>
                                 </div>
                             </div>
-                            <div><Link to="/" className="btn btn-border-primary rounded-pill py-3 px-5 py-md-4 px-md-7 fs-sm fs-md-5 fw-bold me-4">查看更多</Link>
+                            <div><Link to="/" className="btn btn-border-primary rounded-pill view-more-btn py-3 px-5 py-md-4 px-md-7 fw-bold me-4">查看更多</Link>
                             </div>
                         </div>
                                         
                         <div className="row bg-primar-50 align-items-stretch">
                             <div className="col-12 col-md-4 px-md-0 h-100">
                                 <div className="border-4 mb-3 mb-md-0 h-100">
-                                <img src={`${import.meta.env.BASE_URL}images/promo-pet.svg`} alt="pet-supplies" className='promo-img'/>
+                                    <img src={`${import.meta.env.BASE_URL}images/promo-pet.svg`} alt="pet-supplies" className='promo-img'/>
                                 </div>
                             </div>
                             {/* 網格卡片輪播 */}
-                            <div className="col-12 col-md-8">                           
+                            <div className="col-12 col-md-8 h-100">                           
                                 <CardCarousel />                            
                             </div>                        
                         </div>
@@ -719,15 +723,15 @@ export default function Home() {
                     <div>
                         <div className="bg-white d-flex justify-content-between align-items-center mb-7">
                             <div className='d-flex align-items-center m-0'>
-                                <div className='bg-primary p-4 text-white me-4'>
-                                    <CookingPot size={52} />
+                                <div className='bg-primary px-2 py-5 p-md-4 text-white me-2 me-md-4'>
+                                    <CookingPot className='title-icon' />
                                 </div>
-                                <div className="d-flex flex-column-reverse flex-md-row">
-                                    <h2 className='me-3'>食品飲料</h2>
-                                    <div className="badge rounded-pill bg-primary-100 px-4 py-2 text-primary fw-bold fs-20">精選推薦</div>
+                                <div className="d-flex flex-column-reverse align-items-center flex-md-row py-3 py-md-0">
+                                    <h2 className='me-md-3 mb-0'>食品飲料</h2>
+                                    <div className="badge promo-badge rounded-pill bg-primary-100 py-1 px-3 py-md-2 px-md-4 mb-1 mb-md-0 text-primary fw-bold">精選推薦</div>
                                 </div>
                             </div>
-                            <div><Link to="/" className="btn btn-border-primary rounded-pill py-3 px-5 py-md-4 px-md-7 fs-sm fs-md-5 fw-bold me-4">查看更多</Link>
+                            <div><Link to="/" className="btn btn-border-primary rounded-pill view-more-btn py-3 px-5 py-md-4 px-md-7 fs-sm fs-md-5 fw-bold me-4">查看更多</Link>
                             </div>
                         </div>
                                         
@@ -738,7 +742,7 @@ export default function Home() {
                                 </div>
                             </div>
                             {/* 網格卡片輪播 */}
-                            <div className="col-12 col-md-8">                           
+                            <div className="col-12 col-md-8 h-100">                           
                                 <CardCarousel />                            
                             </div>                        
                         </div>
@@ -746,6 +750,8 @@ export default function Home() {
 
                 </div>
             </section>
+
+            <BackToTop />
         </>
     )
 }
