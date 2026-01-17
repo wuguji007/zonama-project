@@ -17,21 +17,36 @@
     }   
 }
 
-.category-text-btn {
-    border-radius: 0.5rem;
-}
+// .category-text-btn {
+//     margin: auto;
+// }
 
-.category-link {
-    display: block;
+.category-text-btn a{
+    position: relative;
+    display: inline-block;
     color: $secondary;
     white-space: nowrap; /* 強制不換行，這是水平滑動的關鍵 */
-    overflow: hidden;
     transition: all 0.3s ease;
     &:hover {
         color: darken($secondary, 30%);        
     }
 }
 
+.category-text-btn a::after {
+    content: "";
+    position: absolute;
+    background-color: $blue-400;
+    height: 5px;
+    width: 0%;
+    left: 0;
+    bottom: -2px;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.category-text-btn a:hover::after {
+    width: 100%;
+}
 
 
 /* 所有類別下拉選單 */
@@ -51,6 +66,10 @@
         background-color: transparent;
         cursor: pointer;
     }
+}
+
+.dropdown-btn {
+    white-space: nowrap;
 }
 
 .dropdown-btn-hover {
@@ -204,6 +223,11 @@
 
 .card-title {
     margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.card-text {
+    font-size: 1.5rem;
 }
 
 
@@ -215,11 +239,16 @@
 
     .card-title {
         margin-bottom: 8px;
+        font-size:  1.25rem;
     }
 
     .card-btn {
         padding: 12px 51px;
         font-size: 14px;    
+    }
+
+    .card-text {
+        font-size: 1.25rem;
     }
 }
 

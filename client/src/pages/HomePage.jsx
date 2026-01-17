@@ -146,7 +146,7 @@ const cardSwiperData = [
     }
 ];
 
-
+ 
 const CardSwiper = () => {
     return (
         <>
@@ -167,13 +167,17 @@ const CardSwiper = () => {
                     >
                         {cardSwiperData.map((card) => (
                         <SwiperSlide key={card.id} className="swiper-slide">
-                            <div className="card product-card h-auto rounded-4 p-3 p-md-5">
+                            <div className="card product-card d-flex flex-column justify-content-between h-auto rounded-4 p-3 p-md-5">
                                 <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
-                                <div className="card-body p-0 mb-4">
-                                    <h5 className="card-title fw-bold fs-5 text-primary-950 mb-20">{card.title}</h5>
-                                    <p className="card-text fs-5 text-primary-950">NT${card.price} <del className="text-gray-300 fs-6 fw-normal">NT${card.origin_price}</del></p>
-                                </div>
-                                <button className="btn btn-primary fw-bold py-4 rounded-pill w-100">加入購物車</button>
+                                <div className="d-flex flex-column justify-content-between h-100">
+                                    <div className="card-body p-0 mb-4">
+                                        <h5 className="card-title fw-bold text-primary-950">{card.title}</h5>                                    
+                                    </div>
+                                    <div className="product-card-footer">
+                                        <p className="card-text text-primary-950">NT${card.price} <del className="text-gray-300 fs-6 fw-normal">NT${card.origin_price}</del></p>
+                                        <button className="btn btn-primary fw-bold py-4 rounded-pill w-100">加入購物車</button>
+                                    </div>
+                                </div>                                   
                             </div>                  
                         </SwiperSlide>
                         ))}
@@ -204,13 +208,17 @@ const GreyCardSwiper = () => {
                     >
                         {cardSwiperData.map((card) => (
                         <SwiperSlide key={card.id} className="swiper-slide">
-                            <div className="card product-card-gray h-auto rounded-4 border-0 p-3 p-md-5">
+                            <div className="card product-card-gray d-flex flex-column justify-content-between h-auto rounded-4 border-0 p-3 p-md-5">
                                 <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
-                                <div className="card-body p-0 mb-4">
-                                    <h5 className="card-title fw-bold fs-5 text-primary-950">{card.title}</h5>
-                                    <p className="card-text fs-5 fs-md-4 text-primary-950">NT${card.price} <del className="text-gray-300 fs-5 fw-normal">NT${card.origin_price}</del></p>
+                                <div className="d-flex flex-column justify-content-between h-100">
+                                    <div className="card-body p-0 mb-4">
+                                        <h5 className="card-title fw-bold text-primary-950">{card.title}</h5>
+                                    </div>
+                                    <div className="product-card-footer">
+                                        <p className="card-text text-primary-950">NT${card.price} <del className="text-gray-300 fs-5 fw-normal">NT${card.origin_price}</del></p>
+                                        <button className="card-btn btn btn-primary fw-bold py-3 py-md-4 rounded-pill w-100">加入購物車</button>                                            
+                                    </div>                                            
                                 </div>
-                                <button className="card-btn btn btn-primary fw-bold py-3 py-md-4 rounded-pill w-100">加入購物車</button>
                             </div>
                         </SwiperSlide>
                         ))}
@@ -316,12 +324,12 @@ const CardCarousel = () => {
 
     return (
         <div className="d-flex flex-column h-100">
-            <div className="position-relative px-0 h-100">
+            <div className="position-relative px-0">
                 
                 {/* 輪播主體 */}
                 <div
                     id="productGridCarousel"
-                    className="carousel-slide h-100"
+                    className="carousel-slide"
                     onTouchStart={onTouchStart}
                     onTouchMove={onTouchMove}
                     onTouchEnd={onTouchEnd}
@@ -347,14 +355,14 @@ const CardCarousel = () => {
                     <ChevronRight size={24} color="#333" />
                     </button>
                        
-                    <div className="carousel-inner h-100">
+                    <div className="carousel-inner">
                         {slides.map((slideProducts, slideIndex) => (
                             <div 
                             key={slideIndex} 
-                            className={`carousel-item h-100 ${slideIndex === activeIndex ? 'active' : ''}`}
+                            className={`carousel-item ${slideIndex === activeIndex ? 'active' : ''}`}
                             >
                                 
-                                <div className="grid-container-wrapper h-100"> 
+                                <div className="grid-container-wrapper"> 
                                     {/* Grid 結構: g-0 (No Gutters) */}
                                     <div className="row g-0">
                                         {slideProducts.map((product) => (
@@ -442,7 +450,7 @@ export default function Home() {
                             <button
                                 onClick={() => setShowMenu(!showMenu)}
                                 type="button"
-                                className="btn border-primary border-1 rounded-1 my-1 text-primary fw-bold category-link dropdown-btn-hover"
+                                className="btn border-primary border-1 rounded-1 my-1 text-primary fw-bold category-link dropdown-btn dropdown-btn-hover"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
@@ -496,7 +504,7 @@ export default function Home() {
                             </div>
                         </div>
 
-                        
+                        {/* Navbar 類別導覽列 */}
                         <ul className='d-flex flex-nowrap overflow-scroll hide-scrollbar justify-content-between align-items-center p-0 mb-0 list-unstyled gap-md-8 mx-md-8'>
                             <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">生活用品</a></li>
                             <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">食品飲料</a></li>
@@ -595,14 +603,14 @@ export default function Home() {
                             </div>
                         </div>
                                         
-                        <div className="row bg-primar-50 align-items-stretch">
+                        <div className="row bg-primar-50 d-flex flex-column flex-md-row h-100">
                             <div className="col-12 col-md-4 px-md-0 h-100">
                                 <div className="border-4 mb-3 mb-md-0 h-100">
-                                    <img src={`${import.meta.env.BASE_URL}images/promo-pet.svg`} alt="pet-supplies" className='promo-img'/>
+                                    <img src={`${import.meta.env.BASE_URL}images/promo-pet.svg`} alt="pet-supplies" className='promo-img h-100'/>
                                 </div>
                             </div>
                             {/* 網格卡片輪播 */}
-                            <div className="col-12 col-md-8 h-100">                           
+                            <div className="col-12 col-md-8">                           
                                 <CardCarousel />                            
                             </div>                        
                         </div>
