@@ -142,11 +142,11 @@ export default function NavBar() {
                 <div className="container-fluid d-flex flex-column px-md-0">
                       <div className="d-flex justify-content-between align-items-center py-0">
                         {/* LOGO-手機版顯示 */}
-                        <Link className="navbar-brand px-3 py-2 my-0 d-block d-md-none" to="/">
+                        <Link className="navbar-brand py-2 my-0 d-block d-md-none" to="/">
                             <img src="./images/zonama-logo-sm.svg" alt="logo" />
                         </Link>
                         {/* LOGO-平板電腦顯示 */}
-                        <Link className="navbar-brand w-240 h-62 p-0 my-0 d-none d-md-block" to="/">
+                        <Link className="navbar-brand w-240 h-62 p-0 my-0 me-0 d-none d-md-block" to="/">
                             <img src="./images/zonama-logo.svg" alt="logo" />
                         </Link>
 
@@ -174,7 +174,7 @@ export default function NavBar() {
                         {/* 登入/註冊 */} 
                         <div className="ms-2 ms-md-3 flex-shrink-md-0">
                             <button className="loggin-btn btn border-primary rounded-pill p-0">
-                                <Link className="nav-link rounded-pill fw-bold py-3 px-5 py-lg-4 px-lg-7" to="/loggin">登入/註冊</Link>
+                                <Link className="nav-link rounded-pill fw-bold py-3 px-5 py-lg-4 px-lg-7" to="/login">登入/註冊</Link>
                             </button>
                         </div>
                                                  
