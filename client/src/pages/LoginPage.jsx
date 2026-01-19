@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, ShoppingCart, User, ArrowLeft, Loader } from 'lucide-react';
 
 
@@ -17,8 +18,7 @@ export default function Login() {
                             // onClick={() => setCurrentPage('home')}
                             className="btn btn-link text-decoration-none text-secondary mb-4 p-0"
                             >
-                            <ArrowLeft size={20} className="me-2" />
-                            返回首頁
+                            <Link to="/"><ArrowLeft size={20} className="me-2" />返回首頁</Link>                           
                             </button>
                             
                             <div className="card shadow-lg border-0 h-auto">
@@ -106,7 +106,7 @@ export default function Login() {
                                             // onClick={() => setCurrentPage('register')}
                                             className="btn btn-link text-decoration-none fw-bold p-0"
                                         >
-                                            立即註冊
+                                            <Link to="/register">立即註冊</Link>
                                         </button>
                                     </div>
                                 </div>
