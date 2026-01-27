@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from "react-router-dom"
-import HeroSwiper from "../components/HeroSwiper.jsx"
+import { Link, useNavigate } from "react-router-dom";
+import HeroSwiper from "../components/HeroSwiper.jsx";
 import BackToTop from '../components/BackToTop.jsx';
-import { getImageUrl } from "../utils/imageHelper.js"
+import { getImageUrl } from "../utils/imageHelper.js";
 import { ChevronLeft, ChevronRight, ShoppingCart, Cat, CookingPot } from 'lucide-react';
 
 // Import Swiper React components
@@ -323,8 +323,8 @@ const CardCarousel = () => {
     };
 
     return (
-        <div className="d-flex flex-column h-100">
-            <div className="position-relative px-0">
+        <div className="d-flex flex-column">
+            <div className="position-relative px-2">
                 
                 {/* 輪播主體 */}
                 <div
@@ -434,7 +434,6 @@ const CardCarousel = () => {
 
 
 export default function Home() {
-
     const [showMenu, setShowMenu] = useState(false);
 
     return (
@@ -456,8 +455,6 @@ export default function Home() {
                             >
                                 所有類別
                             </button>
-
-
                             {/* Dropdown Menu下拉選單 - Desktop/Tablet */}
                             <ul className="dropdown-menu rounded-1 py-7 px-4 p-md-2">
                                 {categories.map((cat) => (
@@ -603,13 +600,17 @@ export default function Home() {
                             </div>
                         </div>
                                         
-                        <div className="row bg-primar-50 d-flex flex-column flex-md-row h-100">
-                            <div className="col-12 col-md-4 px-md-0 h-100">
-                                <div className="border-4 mb-3 mb-md-0 h-100">
+                        <div className="row bg-primar-50 d-flex flex-column flex-md-row">
+                            {/* 左側商品宣傳圖 */}
+                            <div className="col-12 col-md-4 border-4 px-md-0 mb-3 mb-md-0">
+                                <img src={`${import.meta.env.BASE_URL}images/promo-pet.svg`} alt="pet-supplies" className='promo-img h-100'/>
+                            </div>
+                            {/* <div className="col-12 col-md-4 px-md-0">
+                                <div className="border-4 mb-3 mb-md-0">
                                     <img src={`${import.meta.env.BASE_URL}images/promo-pet.svg`} alt="pet-supplies" className='promo-img h-100'/>
                                 </div>
-                            </div>
-                            {/* 網格卡片輪播 */}
+                            </div> */}
+                            {/* 右側網格卡片輪播 */}
                             <div className="col-12 col-md-8">                           
                                 <CardCarousel />                            
                             </div>                        
@@ -633,14 +634,12 @@ export default function Home() {
                             </div>
                         </div>
                                         
-                        <div className="row bg-primar-50 align-items-stretch">
-                            <div className="col-12 col-md-4 px-md-0 h-100">
-                                <div className="border-4 mb-3 mb-md-0 h-100">
+                        <div className="row bg-primar-50">
+                            <div className="col-12 col-md-4 border-4 px-md-0 mb-3 mb-md-0">
                                 <img src={`${import.meta.env.BASE_URL}images/promo-food.svg`} alt="pet-supplies" className='promo-img'/>
-                                </div>
                             </div>
                             {/* 網格卡片輪播 */}
-                            <div className="col-12 col-md-8 h-100">                           
+                            <div className="col-12 col-md-8">                           
                                 <CardCarousel />                            
                             </div>                        
                         </div>

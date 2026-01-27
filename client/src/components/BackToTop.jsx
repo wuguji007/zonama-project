@@ -7,7 +7,7 @@ export default function BackToTop() {
         typeof window !== 'undefined' ? window.innerWidth : 1200
     );
 
-    // --- [Back to Top] 1. 狀態管理：控制按鈕是否顯示 ---
+    // --- 狀態管理：控制按鈕是否顯示 ---
     const [showBackToTop, setShowBackToTop] = useState(false);
   
     useEffect(() => {
@@ -17,7 +17,7 @@ export default function BackToTop() {
 
         const handleResize = () => setWindowWidth(window.innerWidth);
 
-        // --- [Back to Top] 2. 捲動偵測邏輯 ---
+        // --- 捲動偵測邏輯 ---
         const handleScroll = () => {
             // 當捲動超過 300px 時顯示按鈕，否則隱藏
             if (window.scrollY > 300) {
@@ -39,7 +39,7 @@ export default function BackToTop() {
         };
     }, []);
 
-    // --- [Back to Top] 3. 點擊行為：平滑捲動回頂部 ---
+    // --- 點擊行為：平滑捲動回頂部 ---
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -49,7 +49,7 @@ export default function BackToTop() {
 
     return (
         <>
-            {/* --- [Back to Top] 5. 按鈕元件 --- */}
+            {/* --- 按鈕元件 --- */}
             <button 
                 className={`back-to-top-btn ${showBackToTop ? 'visible' : ''}`} 
                 onClick={scrollToTop}
