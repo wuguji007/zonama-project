@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Route, useNavigate } from "react-router-dom";
 import HeroSwiper from "../components/HeroSwiper.jsx";
 import BackToTop from '../components/BackToTop.jsx';
 import { getImageUrl } from "../utils/imageHelper.js";
@@ -21,46 +21,57 @@ const categories = [
     {
         id: 1,
         category: "生活用品",
+        path: '/daily-supplies'
     },
     {
         id: 2,
         category: "食品飲料",
+        path: '/food-beverage'
     },
     {
         id: 3,
         category: "美妝保養",
+        path: '/beauty-care'
     },
     {
         id: 4,
         category: "數位家電",
+        path: '/electronics'
     },
     {
         id: 5,
         category: "嬰幼兒",
+        path: '/baby-kids'
     },
     {
         id: 6,
         category: "寵物用品",
+        path: '/pet-supplies'
     },
     {
         id: 7,
         category: "室內居家",
+        path: '/home-living'
     },
     {
         id: 8,
         category: "運動生活",
+        path: '/sports'
     },
     {
         id: 9,
         category: "廚房用具",
+        path: '/kitchen-ware'
     },
     {
         id: 10,
         category: "手作禮品",
+        path: '/handmade'
     },
     {
         id: 11,
         category: "限時搶購",
+        path: '/flash-sale'
     },
   ];
 
@@ -459,7 +470,7 @@ export default function Home() {
                             <ul className="dropdown-menu rounded-1 py-7 px-4 p-md-2">
                                 {categories.map((cat) => (
                                     <li key={cat.id} className='py-3 rounded-1'>
-                                        <a className="dropdown-item text-primary fw-bold" href="#">{cat.category}</a>                                      
+                                        <Link to={cat.path} className="dropdown-item text-primary fw-bold">{cat.category}</Link>                                  
                                     </li>
                                 ))}
                             </ul>
@@ -504,7 +515,9 @@ export default function Home() {
                         {/* Navbar 類別導覽列 */}
                         <ul className='d-flex flex-nowrap overflow-scroll hide-scrollbar justify-content-between align-items-center p-0 mb-0 list-unstyled gap-md-8 mx-md-8'>
                             <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">生活用品</a></li>
-                            <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">食品飲料</a></li>
+                            <li className="category-text-btn">
+                                <Link to="/food-beverage" className='py-3 px-4 category-link'>食品飲料</Link>
+                            </li>
                             <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">美妝保養</a></li>
                             <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">數位家電</a></li>
                             <li className="category-text-btn"><a href="#" className="py-3 px-4 category-link">嬰幼兒</a></li>

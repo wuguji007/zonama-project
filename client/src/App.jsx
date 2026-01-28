@@ -9,6 +9,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage.jsx';
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx';
 import MemberCenter from './pages/MemberCenter.jsx';
 import CartPage from './pages/CartPage.jsx';
+import FoodBeverage from './pages/FoodBeverage.jsx';
 import { useState } from 'react';
 
 function App() {
@@ -46,7 +47,8 @@ function App() {
             <Route path='/verify' element={<VerifyPage />} />
             <Route path='/forgot-password' element={<ForgotPasswordPage />} />
             <Route path='/reset-password' element={<ResetPasswordPage/>} />
-            <Route path="/cart" element={<CartPage />} />
+            <Route path='/cart' element={<CartPage />} />
+            <Route path='/food-beverage' element={<FoodBeverage />}></Route>
 
             <Route
               path='/member-center'
