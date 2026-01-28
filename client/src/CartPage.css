@@ -1,0 +1,288 @@
+/* src/CartPage.css */
+
+/* 引用您 index.html 中的字型設定 */
+:root {
+    --primary-blue: #24769a;
+    --bg-color: #f4f4f4;
+    --text-color: #333;
+    --gray-text: #888;
+    --border-color: #e0e0e0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    /* 套用 Noto Sans TC */
+    font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    color: var(--text-color);
+}
+
+/* --- Layout --- */
+.cart-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    padding-bottom: 50px;
+}
+
+/* --- Card Styles --- */
+.card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-weight: 700; /* Noto Sans Bold */
+    font-size: 16px;
+}
+
+/* --- Cart Item --- */
+.cart-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border-color);
+    gap: 15px;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.item-img {
+    width: 100px;
+    height: 100px;
+    background-color: #eee;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.item-details {
+    flex: 1;
+}
+
+.item-title {
+    font-size: 15px;
+    margin-bottom: 5px;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.item-spec {
+    font-size: 13px;
+    color: var(--gray-text);
+    margin-bottom: 10px;
+}
+
+.current-price {
+    font-weight: 700;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #aaa;
+    font-size: 13px;
+}
+
+.delivery-info {
+    font-size: 12px;
+    color: var(--primary-blue);
+    margin-top: 5px;
+}
+
+/* --- Actions --- */
+.item-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100px;
+}
+
+.quantity-selector {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.qty-btn {
+    background: #fff;
+    border: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #555;
+}
+
+.qty-input {
+    width: 40px;
+    text-align: center;
+    border: none;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    font-size: 14px;
+    outline: none;
+}
+
+.delete-btn {
+    color: #999;
+    cursor: pointer;
+    font-size: 20px;
+    background: none;
+    border: none;
+}
+
+.delete-btn:hover {
+    color: #ff4d4f;
+}
+
+/* --- Invalid Section --- */
+.invalid-section .cart-item {
+    opacity: 0.6;
+    background-color: #fafafa;
+}
+
+.remove-all-btn {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+/* --- Recommendation Grid --- */
+.recommendation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.rec-item {
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+}
+
+.rec-img {
+    width: 100%;
+    height: 100px;
+    background: #eee;
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+
+.rec-btn {
+    width: 100%;
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+/* --- Sidebar Summary --- */
+.summary-card {
+    position: sticky;
+    top: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #555;
+}
+
+.summary-total {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: 15px;
+    color: #d93025;
+    font-weight: 700;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.checkout-btn {
+    width: 100%;
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: opacity 0.2s;
+}
+
+.checkout-btn:hover {
+    opacity: 0.9;
+}
+
+.free-shipping-hint {
+    font-size: 12px;
+    color: var(--primary-blue);
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* --- Header & Footer (Simplified for Component) --- */
+.simple-header {
+    background: #fff;
+    padding: 15px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-weight: 900;
+    font-size: 24px;
+    color: #1a2b45;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo span {
+    font-size: 18px;
+    color: #666;
+    border-left: 1px solid #ccc;
+    padding-left: 10px;
+    font-weight: 400;
+}
+
+.simple-footer {
+    background-color: #1a1a1a;
+    color: #888;
+    padding: 40px 0;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 40px;
+}
