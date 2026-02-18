@@ -157,295 +157,335 @@ const cardSwiperData = [
     }
 ];
 
- 
-const CardSwiper = () => {
-    return (
-        <>
-            <div className="row">
-                <div className="col-12 pe-0 px-md-4">
-                    <Swiper
-                        slidesPerView={1.3}
-                        spaceBetween={6}
-                        modules={[Navigation]}
-                        navigation={true} 
-                        loop={true}
-                        breakpoints={{
-                        378: { slidesPerView: 1.3, spaceBetween: 6 },
-                        576: { slidesPerView: 2.2, spaceBetween: 6 },
-                        768: { slidesPerView: 3, spaceBetween: 12 },
-                        1024: { slidesPerView: 4, spaceBetween: 12 }
-                        }}
-                    >
-                        {cardSwiperData.map((card) => (
-                        <SwiperSlide key={card.id} className="swiper-slide">
-                            <div className="card product-card d-flex flex-column justify-content-between h-auto rounded-4 p-3 p-md-5">
-                                <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
-                                <div className="d-flex flex-column justify-content-between h-100">
-                                    <div className="card-body p-0 mb-4">
-                                        <h5 className="card-title fw-bold text-primary-950">{card.title}</h5>                                    
-                                    </div>
-                                    <div className="product-card-footer">
-                                        <p className="card-text text-primary-950">NT${card.price} <del className="text-gray-300 fs-6 fw-normal">NT${card.origin_price}</del></p>
-                                        <button className="btn btn-primary fw-bold py-4 rounded-pill w-100">加入購物車</button>
-                                    </div>
-                                </div>                                   
-                            </div>                  
-                        </SwiperSlide>
-                        ))}
-                    </Swiper>
-                </div>
-            </div>                        
-        </>
-    )
-}
 
-
-const GreyCardSwiper = () => {
-    return (
-        <>
-            <div className="row">
-                <div className="col-12 pe-0 px-md-4">
-                    <Swiper
-                        slidesPerView={1.3}
-                        spaceBetween={6}
-                        modules={[Navigation]}
-                        navigation={true} 
-                        loop={true}
-                        breakpoints={{
-                        576: { slidesPerView: 2.2, spaceBetween: 6 },
-                        768: { slidesPerView: 3, spaceBetween: 12 },
-                        1024: { slidesPerView: 4, spaceBetween: 12 }
-                        }}
-                    >
-                        {cardSwiperData.map((card) => (
-                        <SwiperSlide key={card.id} className="swiper-slide">
-                            <div className="card product-card-gray d-flex flex-column justify-content-between h-auto rounded-4 border-0 p-3 p-md-5">
-                                <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
-                                <div className="d-flex flex-column justify-content-between h-100">
-                                    <div className="card-body p-0 mb-4">
-                                        <h5 className="card-title fw-bold text-primary-950">{card.title}</h5>
-                                    </div>
-                                    <div className="product-card-footer">
-                                        <p className="card-text text-primary-950">NT${card.price} <del className="text-gray-300 fs-5 fw-normal">NT${card.origin_price}</del></p>
-                                        <button className="card-btn btn btn-primary fw-bold py-3 py-md-4 rounded-pill w-100">加入購物車</button>                                            
-                                    </div>                                            
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                        ))}
-                    </Swiper> 
-                </div>
-            </div>             
-        </>
-    )
-}
-
-
-//精選推薦區-網格卡片輪播元件
-const products = cardSwiperData;
-
-const CardCarousel = () => {
-    const [activeIndex, setActiveIndex] = useState(0);
+export default function Home() {
+    const [productData, setProductData] = useState([]);
+    const [showMenu, setShowMenu] = useState(false);
+    const GCS_JSON_URL = "https://storage.googleapis.com/zonama-project-assets/products.json";
     
-    // 拖曳/滑動相關 State (整合滑鼠與觸控)
-    const [dragStartX, setDragStartX] = useState(null);
-    const [dragEndX, setDragEndX] = useState(null);
-    const [isDragging, setIsDragging] = useState(false);
-
-    // 觸發滑動的最小距離 (px)
-    const minSwipeDistance = 50; 
-  
-    // 每頁顯示 6 張卡片 (2欄 x 3行)
-    const itemsPerSlide = 6;
-
-    // 將產品分組(Chunks) 
-    const slides = [];
-    for (let i = 0; i < products.length; i += itemsPerSlide) {
-    slides.push(products.slice(i, i + itemsPerSlide));
+    useEffect(() => {
+        fetchData();
+    }, []);
+    
+    const fetchData = async () => {
+        try {
+            const cacheBuster = `?t=$(new Date().getTime())`; // 加上時間戳避免快取
+            const res = await fetch(GCS_JSON_URL + cacheBuster);
+            const data = await res.json();
+            setProductData(data);
+            console.log('產品資料載入成功:', data);
+        } catch (error) {
+            console.error('載入產品資料失敗:', error);
+        }
+    };
+    
+    
+    // 限時搶購商品
+    const flashSaleIds = [1,8,9,12,15,16,2,3];
+    const flashSaleProducts = flashSaleIds
+    .map(id => productData.find(item => item.id === id))
+    .filter(item => item !== undefined); 
+    
+    // 熱銷商品
+    const bestSellerIds = [20, 21, 13, 10, 14, 15, 2, 3];
+    const bestSellerProducts = bestSellerIds.map(id => productData.find(item => item.id === id)).filter(item => item !== undefined);
+    
+    // 會員專屬優惠商品
+    const memberOnlyIds = [22,23,24,11,7,5,18,19];
+    const memberOnlyProducts = memberOnlyIds.map(id => productData.find(item => item.id === id)).filter(item => item !== undefined);
+    
+    // 寵物用品
+    const PetSuppliesCollection = productData.filter(item => {
+        return item.category === "寵物用品";
+    });
+    
+    // 食品飲料
+    const FoodAndBeverage = productData.filter(item => (item.id >= 2 && item.id <= 7) || (item.id >= 29 && item.id <= 34));
+    
+    const CardSwiper = () => {
+        return (
+            <>
+                <div className="row">
+                    <div className="col-12 pe-0 px-md-4">
+                        <Swiper
+                            slidesPerView={1.3}
+                            spaceBetween={6}
+                            modules={[Navigation]}
+                            navigation={true} 
+                            loop={true}
+                            breakpoints={{
+                            378: { slidesPerView: 1.3, spaceBetween: 6 },
+                            576: { slidesPerView: 2.2, spaceBetween: 6 },
+                            768: { slidesPerView: 3, spaceBetween: 12 },
+                            1024: { slidesPerView: 4, spaceBetween: 12 }
+                            }}
+                        >
+                            {cardSwiperData.map((card) => (
+                            <SwiperSlide key={card.id} className="swiper-slide">
+                                <div className="card product-card d-flex flex-column justify-content-between h-auto rounded-4 p-3 p-md-5">
+                                    <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
+                                    <div className="d-flex flex-column justify-content-between h-100">
+                                        <div className="card-body p-0 mb-4">
+                                            <h5 className="card-title fw-bold text-primary-950">{card.title}</h5>                                    
+                                        </div>
+                                        <div className="product-card-footer">
+                                            <p className="card-text text-primary-950">NT${card.price} <del className="text-gray-300 fs-6 fw-normal">NT${card.origin_price}</del></p>
+                                            <button className="btn btn-primary fw-bold py-4 rounded-pill w-100">加入購物車</button>
+                                        </div>
+                                    </div>                                   
+                                </div>                  
+                            </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </div>
+                </div>                        
+            </>
+        )
     }
-
-    const nextSlide = () => {
-    setActiveIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    };
-
-    const prevSlide = () => {
-    setActiveIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-    };
-
-    const goToSlide = (index) => {
-    setActiveIndex(index);
-    };
-
-
-    // --- 通用滑動處理邏輯 ---
-  
-    const handleDragStart = (clientX) => {
-        setDragEndX(null);
-        setDragStartX(clientX);
-        setIsDragging(true);
-    };
-
-    const handleDragMove = (clientX) => {
-        if (isDragging) {
-            setDragEndX(clientX);
+    
+    
+    const GreyCardSwiper = () => {
+        return (
+            <>
+                <div className="row">
+                    <div className="col-12 pe-0 px-md-4">
+                        <Swiper
+                            slidesPerView={1.3}
+                            spaceBetween={6}
+                            modules={[Navigation]}
+                            navigation={true} 
+                            loop={true}
+                            breakpoints={{
+                            576: { slidesPerView: 2.2, spaceBetween: 6 },
+                            768: { slidesPerView: 3, spaceBetween: 12 },
+                            1024: { slidesPerView: 4, spaceBetween: 12 }
+                            }}
+                        >
+                            {cardSwiperData.map((card) => (
+                            <SwiperSlide key={card.id} className="swiper-slide">
+                                <div className="card product-card-gray d-flex flex-column justify-content-between h-auto rounded-4 border-0 p-3 p-md-5">
+                                    <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
+                                    <div className="d-flex flex-column justify-content-between h-100">
+                                        <div className="card-body p-0 mb-4">
+                                            <h5 className="card-title fw-bold text-primary-950">{card.title}</h5>
+                                        </div>
+                                        <div className="product-card-footer">
+                                            <p className="card-text text-primary-950">NT${card.price} <del className="text-gray-300 fs-5 fw-normal">NT${card.origin_price}</del></p>
+                                            <button className="card-btn btn btn-primary fw-bold py-3 py-md-4 rounded-pill w-100">加入購物車</button>                                            
+                                        </div>                                            
+                                    </div>
+                                </div>
+                            </SwiperSlide>
+                            ))}
+                        </Swiper> 
+                    </div>
+                </div>             
+            </>
+        )
+    }
+    
+    
+    //精選推薦區-網格卡片輪播元件
+    const products = cardSwiperData;
+    
+    const CardCarousel = () => {
+        const [activeIndex, setActiveIndex] = useState(0);
+        
+        // 拖曳/滑動相關 State (整合滑鼠與觸控)
+        const [dragStartX, setDragStartX] = useState(null);
+        const [dragEndX, setDragEndX] = useState(null);
+        const [isDragging, setIsDragging] = useState(false);
+    
+        // 觸發滑動的最小距離 (px)
+        const minSwipeDistance = 50; 
+      
+        // 每頁顯示 6 張卡片 (2欄 x 3行)
+        const itemsPerSlide = 6;
+    
+        // 將產品分組(Chunks) 
+        const slides = [];
+        for (let i = 0; i < products.length; i += itemsPerSlide) {
+        slides.push(products.slice(i, i + itemsPerSlide));
         }
-    };
-
-    const handleDragEnd = () => {
-        if (!dragStartX || !dragEndX) {
+    
+        const nextSlide = () => {
+        setActiveIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+        };
+    
+        const prevSlide = () => {
+        setActiveIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+        };
+    
+        const goToSlide = (index) => {
+        setActiveIndex(index);
+        };
+    
+    
+        // --- 通用滑動處理邏輯 ---
+      
+        const handleDragStart = (clientX) => {
+            setDragEndX(null);
+            setDragStartX(clientX);
+            setIsDragging(true);
+        };
+    
+        const handleDragMove = (clientX) => {
+            if (isDragging) {
+                setDragEndX(clientX);
+            }
+        };
+    
+        const handleDragEnd = () => {
+            if (!dragStartX || !dragEndX) {
+                setIsDragging(false);
+                return;
+            }
+            
+            const distance = dragStartX - dragEndX;
+            const isLeftSwipe = distance > minSwipeDistance;
+            const isRightSwipe = distance < -minSwipeDistance;
+    
+            if (isLeftSwipe) {
+                nextSlide();
+            }
+            if (isRightSwipe) {
+                prevSlide();
+            }
+            
+            // 重置狀態
             setIsDragging(false);
-            return;
-        }
-        
-        const distance = dragStartX - dragEndX;
-        const isLeftSwipe = distance > minSwipeDistance;
-        const isRightSwipe = distance < -minSwipeDistance;
-
-        if (isLeftSwipe) {
-            nextSlide();
-        }
-        if (isRightSwipe) {
-            prevSlide();
-        }
-        
-        // 重置狀態
-        setIsDragging(false);
-        setDragStartX(null);
-        setDragEndX(null);
-    };
-
-    // --- 觸控事件 ---
-    const onTouchStart = (e) => handleDragStart(e.targetTouches[0].clientX);
-    const onTouchMove = (e) => handleDragMove(e.targetTouches[0].clientX);
-    const onTouchEnd = () => handleDragEnd();
-
-    // --- 滑鼠事件 ---
-    const onMouseDown = (e) => {
-        e.preventDefault(); // 防止預設拖曳圖片行為
-        handleDragStart(e.clientX);
-    };
-    const onMouseMove = (e) => {
-        if (isDragging) e.preventDefault();
-        handleDragMove(e.clientX);
-    };
-    const onMouseUp = () => handleDragEnd();
-    const onMouseLeave = () => {
-        if (isDragging) handleDragEnd(); // 滑鼠離開區域視為結束拖曳
-    };
-
-    return (
-        <div className="d-flex flex-column">
-            <div className="position-relative px-2">
-                
-                {/* 輪播主體 */}
-                <div
-                    id="productGridCarousel"
-                    className="carousel-slide"
-                    onTouchStart={onTouchStart}
-                    onTouchMove={onTouchMove}
-                    onTouchEnd={onTouchEnd}
-                    onMouseDown={onMouseDown}
-                    onMouseMove={onMouseMove}
-                    onMouseUp={onMouseUp}
-                    onMouseLeave={onMouseLeave}
-                >
-                
-                    {/* 左右導航按鈕 (Lucide Icons) */}
-                    <button 
-                    className="nav-btn nav-prev" 
-                    onClick={prevSlide}
-                    aria-label="Previous Slide"
+            setDragStartX(null);
+            setDragEndX(null);
+        };
+    
+        // --- 觸控事件 ---
+        const onTouchStart = (e) => handleDragStart(e.targetTouches[0].clientX);
+        const onTouchMove = (e) => handleDragMove(e.targetTouches[0].clientX);
+        const onTouchEnd = () => handleDragEnd();
+    
+        // --- 滑鼠事件 ---
+        const onMouseDown = (e) => {
+            e.preventDefault(); // 防止預設拖曳圖片行為
+            handleDragStart(e.clientX);
+        };
+        const onMouseMove = (e) => {
+            if (isDragging) e.preventDefault();
+            handleDragMove(e.clientX);
+        };
+        const onMouseUp = () => handleDragEnd();
+        const onMouseLeave = () => {
+            if (isDragging) handleDragEnd(); // 滑鼠離開區域視為結束拖曳
+        };
+    
+        return (
+            <div className="d-flex flex-column">
+                <div className="position-relative px-2">
+                    
+                    {/* 輪播主體 */}
+                    <div
+                        id="productGridCarousel"
+                        className="carousel-slide"
+                        onTouchStart={onTouchStart}
+                        onTouchMove={onTouchMove}
+                        onTouchEnd={onTouchEnd}
+                        onMouseDown={onMouseDown}
+                        onMouseMove={onMouseMove}
+                        onMouseUp={onMouseUp}
+                        onMouseLeave={onMouseLeave}
                     >
-                    <ChevronLeft size={24} color="#333" />
-                    </button>
-                    <button 
-                    className="nav-btn nav-next" 
-                    onClick={nextSlide}
-                    aria-label="Next Slide"
-                    >
-                    <ChevronRight size={24} color="#333" />
-                    </button>
-                       
-                    <div className="carousel-inner">
-                        {slides.map((slideProducts, slideIndex) => (
-                            <div 
-                            key={slideIndex} 
-                            className={`carousel-item ${slideIndex === activeIndex ? 'active' : ''}`}
-                            >
-                                
-                                <div className="grid-container-wrapper"> 
-                                    {/* Grid 結構: g-0 (No Gutters) */}
-                                    <div className="row g-0">
-                                        {slideProducts.map((product) => (
-                                        /* 響應式設定: 
-                                            col-12: 手機單欄 (每頁6個 = 6行)
-                                            col-md-6: 電腦雙欄 (每頁6個 = 3行) 
-                                        */
-                                            <div key={product.id} className="col-12 col-md-6">
-                                                <div className="grid-card product-card">
-                                                    <div className="row g-0">
-                                                        <div className="col-6">
-                                                            <div className="card-img-wrapper">
-                                                                <img 
-                                                                src={`${import.meta.env.BASE_URL}${product.image}`} 
-                                                                className="card-img-top" 
-                                                                alt={product.title} 
-                                                                />
+                    
+                        {/* 左右導航按鈕 (Lucide Icons) */}
+                        <button 
+                        className="nav-btn nav-prev" 
+                        onClick={prevSlide}
+                        aria-label="Previous Slide"
+                        >
+                        <ChevronLeft size={24} color="#333" />
+                        </button>
+                        <button 
+                        className="nav-btn nav-next" 
+                        onClick={nextSlide}
+                        aria-label="Next Slide"
+                        >
+                        <ChevronRight size={24} color="#333" />
+                        </button>
+                           
+                        <div className="carousel-inner">
+                            {slides.map((slideProducts, slideIndex) => (
+                                <div 
+                                key={slideIndex} 
+                                className={`carousel-item ${slideIndex === activeIndex ? 'active' : ''}`}
+                                >
+                                    
+                                    <div className="grid-container-wrapper"> 
+                                        {/* Grid 結構: g-0 (No Gutters) */}
+                                        <div className="row g-0">
+                                            {slideProducts.map((product) => (
+                                            /* 響應式設定: 
+                                                col-12: 手機單欄 (每頁6個 = 6行)
+                                                col-md-6: 電腦雙欄 (每頁6個 = 3行) 
+                                            */
+                                                <div key={product.id} className="col-12 col-md-6">
+                                                    <div className="grid-card product-card">
+                                                        <div className="row g-0">
+                                                            <div className="col-6">
+                                                                <div className="card-img-wrapper">
+                                                                    <img 
+                                                                    src={`${import.meta.env.BASE_URL}${product.image}`} 
+                                                                    className="card-img-top" 
+                                                                    alt={product.title} 
+                                                                    />
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                                
-                                                        <div className="col-6 d-flex flex-column">
-                                                            <div className="card-body d-flex flex-column p-3">                              
-                                                                <h6 className="card-title fw-bold fs-5 fs-md-4 mb-1">{product.title}</h6 >
-                                                                
-                                                                <div className="d-flex justify-content-between align-items-start align-items-md-start flex-column align-items-start mt-auto pt-2 border-top">
-                                                                    <div className="d-flex flex-column align-items-start align-items-md-start">
-                                                                        <span className="text-primary-950 fw-bold fs-4">NT${product.price}</span>
-                                                                        <del className='text-gray-300 fs-6 fs-md-5 mb-2'>${product.origin_price}</del>
+                                                                    
+                                                            <div className="col-6 d-flex flex-column">
+                                                                <div className="card-body d-flex flex-column p-3">                              
+                                                                    <h6 className="card-title fw-bold fs-5 fs-md-4 mb-1">{product.title}</h6 >
+                                                                    
+                                                                    <div className="d-flex justify-content-between align-items-start align-items-md-start flex-column align-items-start mt-auto pt-2 border-top">
+                                                                        <div className="d-flex flex-column align-items-start align-items-md-start">
+                                                                            <span className="text-primary-950 fw-bold fs-4">NT${product.price}</span>
+                                                                            <del className='text-gray-300 fs-6 fs-md-5 mb-2'>${product.origin_price}</del>
+                                                                        </div>
+                                                                        <button className="btn btn-add-cart text-white fw-bold btn-sm rounded-pill w-100 py-3 d-flex align-items-center shadow-sm d-none d-md-block" style={{ fontSize: '0.8rem' }}>
+                                                                            加入購物車
+                                                                        </button>
+                                                                        {/* <button className="btn bg-primary text-white btn-sm rounded-circle px-2 py-2 d-flex align-items-center shadow-sm d-block d-md-none" style={{ fontSize: '0.8rem' }}>
+                                                                        <ShoppingCart size={20} className="" />
+                                                                        </button> */}
                                                                     </div>
-                                                                    <button className="btn btn-add-cart text-white fw-bold btn-sm rounded-pill w-100 py-3 d-flex align-items-center shadow-sm d-none d-md-block" style={{ fontSize: '0.8rem' }}>
-                                                                        加入購物車
-                                                                    </button>
-                                                                    {/* <button className="btn bg-primary text-white btn-sm rounded-circle px-2 py-2 d-flex align-items-center shadow-sm d-block d-md-none" style={{ fontSize: '0.8rem' }}>
-                                                                    <ShoppingCart size={20} className="" />
-                                                                    </button> */}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
+    
+                        {/* Pagination Dots (Bootstrap Indicators) */}
+                        <div className="carousel-indicators">
+                            {slides.map((_, index) => (
+                                <button
+                                key={index}
+                                type="button"
+                                onClick={() => goToSlide(index)}
+                                className={index === activeIndex ? "active" : ""}
+                                aria-current={index === activeIndex ? "true" : "false"}
+                                aria-label={`Slide ${index + 1}`}
+                                ></button>
+                            ))}
+                        </div>               
                     </div>
-
-                    {/* Pagination Dots (Bootstrap Indicators) */}
-                    <div className="carousel-indicators">
-                        {slides.map((_, index) => (
-                            <button
-                            key={index}
-                            type="button"
-                            onClick={() => goToSlide(index)}
-                            className={index === activeIndex ? "active" : ""}
-                            aria-current={index === activeIndex ? "true" : "false"}
-                            aria-label={`Slide ${index + 1}`}
-                            ></button>
-                        ))}
-                    </div>               
                 </div>
             </div>
-        </div>
-    );
-};
-//精選推薦區-網格卡片輪播元件
+        );
+    };
+    //精選推薦區-網格卡片輪播元件
 
-
-
-export default function Home() {
-    const [showMenu, setShowMenu] = useState(false);
 
     return (
         <>
