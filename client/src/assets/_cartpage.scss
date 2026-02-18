@@ -9,14 +9,14 @@
     --border-color: #e0e0e0;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--bg-color);
+// body {
+//     margin: 0;
+//     padding: 0;
+//     background-color: var(--bg-color);
     /* 套用 Noto Sans TC */
-    font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-    color: var(--text-color);
-}
+//     font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+//     color: var(--text-color);
+// }
 
 /* --- Layout --- */
 .cart-container {
@@ -278,11 +278,11 @@ body {
     font-weight: 400;
 }
 
-.simple-footer {
-    background-color: #1a1a1a;
-    color: #888;
-    padding: 40px 0;
-    text-align: center;
-    font-size: 12px;
-    margin-top: 40px;
-}
+// .simple-footer {
+//     background-color: #1a1a1a;
+//     color: #888;
+//     padding: 40px 0;
+//     text-align: center;
+//     font-size: 12px;
+//     margin-top: 40px;
+// }

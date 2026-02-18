@@ -1,46 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import './CartPage.css'; // 引入上面的 CSS
+// import './CartPage.css'; // 引入上面的 CSS   ---> 這行需移除
+import { getCart, updateQuantity, removeCartItem, addToCart, clearInvalidItems, toggleItemSelection } from '../api/cartApi';
 
 const CartPage = () => {
-  // [State] 購物車商品資料 (模擬從 API 取得)
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 101,
-      name: '寵愛營養配方貓飼料2包-獨家配方',
-      spec: '規格：包',
-      price: 369,
-      originalPrice: 1099,
-      quantity: 1,
-      image: 'https://placehold.co/100',
-      delivery: '下單後，商品預計 2026/01/29 出貨(15天後)',
-      selected: true
-    },
-    {
-      id: 102,
-      name: '麻辣燙湯底方塊2包-獨家配方',
-      spec: '規格：一箱入',
-      price: 899,
-      originalPrice: 1399,
-      quantity: 1,
-      image: 'https://placehold.co/100',
-      delivery: '下單後，由廠商直接出貨',
-      selected: true
-    }
-  ]);
+  // [State] 購物車ID和用戶ID
+  const [cartId, setCartId] = useState(1); // 假設當前用戶 ID
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // [State] 購物車商品資料
+  const [cartItems, setCartItems] = useState([]);
 
   // [State] 失效商品
-  const [invalidItems, setInvalidItems] = useState([
-    {
-      id: 999,
-      name: '無線藍牙耳罩式耳機',
-      spec: '規格：黑金色',
-      price: 6899,
-      originalPrice: 11099,
-      image: 'https://placehold.co/100'
-    }
-  ]);
+  const [invalidItems, setInvalidItems] = useState([]);
 
-  // [State] 推薦商品 (模擬 API)
+  // [State] 推薦商品
   const recommendations = [
     { id: 201, name: '防水狗狗雨衣', price: 399 },
     { id: 202, name: '貓咪悠閒玩具組', price: 789 },
@@ -48,31 +22,93 @@ const CartPage = () => {
     { id: 204, name: '寵物專用飲水機', price: 1200 }
   ];
 
-  // [API 預留]: 初始化載入
+  // [API]: 初始化載入購物車資料
   useEffect(() => {
-    // fetch('/api/cart').then(...)
-    console.log('[API Call] 載入購物車資料...');
+    loadCartData();
   }, []);
 
-  // [Logic] 變更數量
-  const handleQuantityChange = (id, delta) => {
-    setCartItems(prev => prev.map(item => {
-      if (item.id === id) {
-        const newQty = Math.max(1, item.quantity + delta);
-        // [API 預留]: POST /api/cart/update-qty
-        console.log(`[API Call] 更新商品 ${id} 數量為 ${newQty}`);
-        return { ...item, quantity: newQty };
+  const loadCartData = async () => {
+    try {
+      setLoading(true);
+      const cartData = await getCart(1); // 假設用戶 ID 為 1
+      if (cartData) {
+        setCartId(cartData.id);
+        setCartItems(cartData.items || []);
+        setInvalidItems(cartData.invalidItems || []);
       }
-      return item;
-    }));
+      console.log('[API Success] 購物車資料已載入');
+    } catch (err) {
+      console.error('[API Error] 載入購物車失敗:', err);
+      setError('無法載入購物車資料');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // [Logic] 變更數量
+  const handleQuantityChange = async (id, delta) => {
+    const item = cartItems.find(i => i.id === id);
+    if (!item) return;
+
+    const newQty = Math.max(1, item.quantity + delta);
+
+    try {
+      const updatedCart = await updateQuantity(cartId, id, newQty);
+      setCartItems(updatedCart.items || []);
+      console.log(`[API Success] 商品 ${id} 數量已更新為 ${newQty}`);
+    } catch (err) {
+      console.error(`[API Error] 更新商品數量失敗:`, err);
+      alert('更新數量失敗，請重試');
+    }
   };
 
   // [Logic] 刪除商品
-  const handleRemoveItem = (id) => {
+  const handleRemoveItem = async (id) => {
     if (window.confirm('確定要移除此商品嗎？')) {
-      // [API 預留]: DELETE /api/cart/{id}
-      setCartItems(prev => prev.filter(item => item.id !== id));
-      console.log(`[API Call] 刪除商品 ${id}`);
+      try {
+        const updatedCart = await removeCartItem(cartId, id);
+        setCartItems(updatedCart.items || []);
+        console.log(`[API Success] 商品 ${id} 已移除`);
+      } catch (err) {
+        console.error(`[API Error] 移除商品失敗:`, err);
+        alert('移除商品失敗，請重試');
+      }
+    }
+  };
+
+  // [Logic] 選中/取消選中商品
+  const handleToggleItemSelection = async (id, currentSelected) => {
+    try {
+      const updatedCart = await toggleItemSelection(cartId, id, !currentSelected);
+      setCartItems(updatedCart.items || []);
+      console.log(`[API Success] 商品 ${id} 選中狀態已更新`);
+    } catch (err) {
+      console.error(`[API Error] 更新選中狀態失敗:`, err);
+    }
+  };
+
+  // [Logic] 加入購物車 (推薦商品)
+  const handleAddRecommendation = async (product) => {
+    try {
+      const updatedCart = await addToCart(cartId, product);
+      setCartItems(updatedCart.items || []);
+      console.log(`[API Success] 推薦商品 ${product.name} 已加入購物車`);
+      alert('已加入購物車！');
+    } catch (err) {
+      console.error(`[API Error] 加入購物車失敗:`, err);
+      alert('加入購物車失敗，請重試');
+    }
+  };
+
+  // [Logic] 清除失效商品
+  const handleClearInvalidItems = async () => {
+    try {
+      const updatedCart = await clearInvalidItems(cartId);
+      setInvalidItems(updatedCart.invalidItems || []);
+      console.log(`[API Success] 失效商品已清除`);
+    } catch (err) {
+      console.error(`[API Error] 清除失效商品失敗:`, err);
+      alert('清除失效商品失敗，請重試');
     }
   };
 
@@ -84,6 +120,35 @@ const CartPage = () => {
   const total = subtotal + shippingFee - discount;
   const freeShippingThreshold = 2000;
   const diffForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
+
+  // [Logic] 結帳
+  const handleCheckout = async () => {
+    if (selectedItems.length === 0) {
+      alert('請選擇要結帳的商品');
+      return;
+    }
+
+    try {
+      const orderData = {
+        items: selectedItems,
+        subtotal,
+        shippingFee,
+        discount,
+        total
+      };
+
+      // 實際的結帳 API 調用可以在這裡進行
+      console.log('[API Call] 結帳數據:', orderData);
+      
+      // 臨時模擬結帳成功
+      alert('結帳成功！訂單已提交');
+      // 可以在此添加跳轉到結帳頁面或訂單確認頁面
+      window.location.href = '#/checkout';
+    } catch (err) {
+      console.error('[API Error] 結帳失敗:', err);
+      alert('結帳失敗，請重試');
+    }
+  };
 
   return (
     <div>
@@ -99,7 +164,12 @@ const CartPage = () => {
         </div>
       </header>
 
+      {/* 加載和錯誤提示 */}
+      {loading && <div style={{padding: '20px', textAlign: 'center'}}>加載購物車中...</div>}
+      {error && <div style={{padding: '20px', textAlign: 'center', color: 'red'}}>{error}</div>}
+
       {/* Main Content */}
+      {!loading && (
       <div className="cart-container">
         {/* 左欄 */}
         <div className="main-content">
@@ -113,29 +183,38 @@ const CartPage = () => {
               </span>
             </div>
 
-            {cartItems.map(item => (
-              <div key={item.id} className="cart-item">
-                <input type="checkbox" checked={item.selected} readOnly style={{marginTop:'5px', width:'18px', height:'18px'}} />
-                <img src={item.image} alt={item.name} className="item-img" />
-                <div className="item-details">
-                  <div className="item-title">{item.name}</div>
-                  <div className="item-spec">{item.spec}</div>
-                  <div style={{marginBottom:'5px'}}>
-                    <span className="current-price">NT${item.price.toLocaleString()}</span>
-                    <span className="original-price">NT${item.originalPrice.toLocaleString()}</span>
+            {cartItems.length === 0 ? (
+              <div style={{padding: '20px', textAlign: 'center', color: '#999'}}>購物車是空的</div>
+            ) : (
+              cartItems.map(item => (
+                <div key={item.id} className="cart-item">
+                  <input 
+                    type="checkbox" 
+                    checked={item.selected} 
+                    onChange={() => handleToggleItemSelection(item.id, item.selected)}
+                    style={{marginTop:'5px', width:'18px', height:'18px'}} 
+                  />
+                  <img src={item.image} alt={item.name} className="item-img" />
+                  <div className="item-details">
+                    <div className="item-title">{item.name}</div>
+                    <div className="item-spec">{item.spec}</div>
+                    <div style={{marginBottom:'5px'}}>
+                      <span className="current-price">NT${item.price.toLocaleString()}</span>
+                      <span className="original-price">NT${item.originalPrice.toLocaleString()}</span>
+                    </div>
+                    <div className="delivery-info">{item.delivery}</div>
                   </div>
-                  <div className="delivery-info">{item.delivery}</div>
-                </div>
-                <div className="item-actions">
-                  <button className="delete-btn" onClick={() => handleRemoveItem(item.id)}>🗑</button>
-                  <div className="quantity-selector">
-                    <button className="qty-btn" onClick={() => handleQuantityChange(item.id, -1)}>-</button>
-                    <input type="text" className="qty-input" value={item.quantity} readOnly />
-                    <button className="qty-btn" onClick={() => handleQuantityChange(item.id, 1)}>+</button>
+                  <div className="item-actions">
+                    <button className="delete-btn" onClick={() => handleRemoveItem(item.id)}>🗑</button>
+                    <div className="quantity-selector">
+                      <button className="qty-btn" onClick={() => handleQuantityChange(item.id, -1)}>-</button>
+                      <input type="text" className="qty-input" value={item.quantity} readOnly />
+                      <button className="qty-btn" onClick={() => handleQuantityChange(item.id, 1)}>+</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* 失效商品區 */}
@@ -143,8 +222,7 @@ const CartPage = () => {
             <div className="card invalid-section">
               <div className="section-header">
                 <span>失效商品 ({invalidItems.length})</span>
-                {/* [API]: POST /api/cart/clear-invalid */}
-                <button className="remove-all-btn" onClick={() => setInvalidItems([])}>移除全部</button>
+                <button className="remove-all-btn" onClick={handleClearInvalidItems}>移除全部</button>
               </div>
               {invalidItems.map(item => (
                 <div key={item.id} className="cart-item">
@@ -158,7 +236,7 @@ const CartPage = () => {
                     </div>
                   </div>
                   <div className="item-actions">
-                    <button className="delete-btn">🗑</button>
+                    <button className="delete-btn" onClick={() => handleRemoveItem(item.id)}>🗑</button>
                   </div>
                 </div>
               ))}
@@ -174,8 +252,7 @@ const CartPage = () => {
                   <img src="https://placehold.co/100" alt={rec.name} className="rec-img" />
                   <div className="item-title" style={{fontSize:'13px', height:'38px', overflow:'hidden'}}>{rec.name}</div>
                   <div className="current-price" style={{fontSize:'14px'}}>NT${rec.price.toLocaleString()}</div>
-                  {/* [API]: POST /api/cart/add */}
-                  <button className="rec-btn">加入購物車</button>
+                  <button className="rec-btn" onClick={() => handleAddRecommendation(rec)}>加入購物車</button>
                 </div>
               ))}
             </div>
@@ -203,8 +280,7 @@ const CartPage = () => {
               <span>NT${total.toLocaleString()}</span>
             </div>
             
-            {/* [API]: POST /api/checkout */}
-            <button className="checkout-btn">結帳</button>
+            <button className="checkout-btn" onClick={handleCheckout}>結帳</button>
 
             {diffForFreeShipping > 0 ? (
                <div className="free-shipping-hint">還差 NT${diffForFreeShipping.toLocaleString()} 可享免運優惠</div>
@@ -214,14 +290,15 @@ const CartPage = () => {
           </div>
         </div>
       </div>
+      )}
 
       {/* Footer */}
-      <footer className="simple-footer">
+      {/* <footer className="simple-footer">
         <div className="footer-logo" style={{fontSize:'30px', fontWeight:'900', color:'var(--primary-blue)', marginBottom:'20px'}}>Z</div>
         <p>關於我們 | 服務條款 | 隱私權政策 | 聯絡我們</p>
         <br/>
         <p>Copyright © 2026 ZONAMA. All rights reserved.</p>
-      </footer>
+      </footer> */}
     </div>
   );
 };

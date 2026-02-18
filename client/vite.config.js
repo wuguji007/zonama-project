@@ -1,8 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
-  base: '/zonama-project/',
   plugins: [react()],
+  base: '/', // 或直接不寫 base
 })
