@@ -36,10 +36,10 @@ function App() {
 
   return (
     <>
-      <div className="App">
+      <div className="App d-flex flex-column min-vh-100">
         {/* isLoggedIn 根據是否有 Token 來決定顯示內容 */}
         <Header isLoggedIn={!!token} onLogout={handleLogout} />
-        <div className="App-container">
+        <div className="App-container flex-grow-1">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage setToken={setToken} setUser={setUser} />} />

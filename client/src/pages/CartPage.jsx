@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import './CartPage.css'; // 引入上面的 CSS   ---> 這行需移除
 import { getCart, updateQuantity, removeCartItem, addToCart, clearInvalidItems, toggleItemSelection } from '../api/cartApi';
 
 const CartPage = () => {
@@ -27,64 +26,121 @@ const CartPage = () => {
     loadCartData();
   }, []);
 
-  const loadCartData = async () => {
+const loadCartData = async () => {
     try {
       setLoading(true);
-      const cartData = await getCart(1); // 假設用戶 ID 為 1
-      if (cartData) {
-        setCartId(cartData.id);
-        setCartItems(cartData.items || []);
-        setInvalidItems(cartData.invalidItems || []);
-      }
-      console.log('[API Success] 購物車資料已載入');
+
+      // 1. 去你的專屬連結把所有商品資料抓下來
+      const response = await fetch('https://storage.googleapis.com/zonama-project-assets/product-list.json');
+      const products = await response.json();
+
+      // 2. 把商品列表打亂（洗牌），然後切出前 3 項
+      const shuffledProducts = products.sort(() => 0.5 - Math.random());
+      const randomThree = shuffledProducts.slice(0, 3);
+
+      // 3. 把這 3 項商品「改裝」成我們購物車需要的格式
+      const mockCartItems = randomThree.map(product => ({
+        id: product.id || Math.random().toString(), // 確保有獨一無二的 ID
+        selected: true, // 預設全部打勾
+        // 💡 備註：如果你的 JSON 圖片欄位叫 image_url 或 thumbnail，請在這裡修改
+        image: product.image || product.thumbnail || 'https://placehold.co/100', 
+        // 💡 備註：如果你的 JSON 商品名稱叫 title，請把 product.name 改成 product.title
+        name: product.name || product.title || 'Zonama 隨機商品',
+        spec: product.spec || '標準規格', // 如果 JSON 沒有規格，預設給這個字
+        price: product.price || 0,
+        originalPrice: Math.round((product.price || 100) * 1.2), // 偷偷把原價設為售價的 1.2 倍來顯示折扣感
+        delivery: '滿額免運 / 快速出貨',
+        quantity: 1 // 預設購買數量為 1
+      }));
+
+      // 更新到 React 的狀態 (State) 裡面
+      setCartId(1);
+      setCartItems(mockCartItems);
+      setInvalidItems([]); // 假資料測試時，先不放失效商品
+      
+      console.log('[測試成功] 已成功從 JSON 隨機載入 3 項商品！', mockCartItems);
     } catch (err) {
-      console.error('[API Error] 載入購物車失敗:', err);
-      setError('無法載入購物車資料');
+      console.error('[API Error] 載入 JSON 失敗:', err);
+      setError('無法載入購物車資料，請確認 JSON 連結是否公開可讀取');
     } finally {
       setLoading(false);
     }
   };
 
   // [Logic] 變更數量
-  const handleQuantityChange = async (id, delta) => {
-    const item = cartItems.find(i => i.id === id);
-    if (!item) return;
+  //const handleQuantityChange = async (id, delta) => {
+  //  const item = cartItems.find(i => i.id === id);
+  //  if (!item) return;
 
-    const newQty = Math.max(1, item.quantity + delta);
+  //  const newQty = Math.max(1, item.quantity + delta);
 
-    try {
-      const updatedCart = await updateQuantity(cartId, id, newQty);
-      setCartItems(updatedCart.items || []);
-      console.log(`[API Success] 商品 ${id} 數量已更新為 ${newQty}`);
-    } catch (err) {
-      console.error(`[API Error] 更新商品數量失敗:`, err);
-      alert('更新數量失敗，請重試');
-    }
+  //  try {
+  //    const updatedCart = await updateQuantity(cartId, id, newQty);
+  //    setCartItems(updatedCart.items || []);
+  //    console.log(`[API Success] 商品 ${id} 數量已更新為 ${newQty}`);
+  //  } catch (err) {
+  //    console.error(`[API Error] 更新商品數量失敗:`, err);
+  //    alert('更新數量失敗，請重試');
+  //  }
+  //};
+
+// [Logic] 變更數量 (純前端測試版)
+  const handleQuantityChange = (id, delta) => {
+    setCartItems(prevItems => 
+      prevItems.map(item => {
+        if (item.id === id) {
+          // 確保數量最少是 1
+          return { ...item, quantity: Math.max(1, item.quantity + delta) };
+        }
+        return item;
+      })
+    );
   };
 
+
   // [Logic] 刪除商品
-  const handleRemoveItem = async (id) => {
+  //const handleRemoveItem = async (id) => {
+  //  if (window.confirm('確定要移除此商品嗎？')) {
+  //    try {
+  //     const updatedCart = await removeCartItem(cartId, id);
+  //      setCartItems(updatedCart.items || []);
+  //      console.log(`[API Success] 商品 ${id} 已移除`);
+  //    } catch (err) {
+  //      console.error(`[API Error] 移除商品失敗:`, err);
+  //      alert('移除商品失敗，請重試');
+  //    }
+  //  }
+  //};
+
+// [Logic] 刪除商品 (純前端測試版)
+  const handleRemoveItem = (id) => {
     if (window.confirm('確定要移除此商品嗎？')) {
-      try {
-        const updatedCart = await removeCartItem(cartId, id);
-        setCartItems(updatedCart.items || []);
-        console.log(`[API Success] 商品 ${id} 已移除`);
-      } catch (err) {
-        console.error(`[API Error] 移除商品失敗:`, err);
-        alert('移除商品失敗，請重試');
-      }
+      // 直接把該 ID 的商品從陣列中過濾掉
+      setCartItems(prevItems => prevItems.filter(item => item.id !== id));
     }
   };
 
   // [Logic] 選中/取消選中商品
-  const handleToggleItemSelection = async (id, currentSelected) => {
-    try {
-      const updatedCart = await toggleItemSelection(cartId, id, !currentSelected);
-      setCartItems(updatedCart.items || []);
-      console.log(`[API Success] 商品 ${id} 選中狀態已更新`);
-    } catch (err) {
-      console.error(`[API Error] 更新選中狀態失敗:`, err);
-    }
+  //const handleToggleItemSelection = async (id, currentSelected) => {
+  //  try {
+  //    const updatedCart = await toggleItemSelection(cartId, id, !currentSelected);
+  //    setCartItems(updatedCart.items || []);
+  //    console.log(`[API Success] 商品 ${id} 選中狀態已更新`);
+  //  } catch (err) {
+  //    console.error(`[API Error] 更新選中狀態失敗:`, err);
+  //  }
+  //};
+
+// [Logic] 選中/取消選中商品 (純前端測試版)
+  const handleToggleItemSelection = (id) => {
+    setCartItems(prevItems => 
+      prevItems.map(item => {
+        if (item.id === id) {
+          return { ...item, selected: !item.selected };
+        }
+        return item;
+      })
+    );
   };
 
   // [Logic] 加入購物車 (推薦商品)
