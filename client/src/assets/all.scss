@@ -28,13 +28,21 @@ body {
    新增：全域佈局設定 (解決 Footer 重疊問題)
    ========================================= */
 #root {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
-#root > :nth-child(2) {
-  flex: 1;
+.App {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* 讓 App 佔滿整個視窗高度 */
+}
+
+.App-container {
+  flex: 1; /* 關鍵：這會強迫中間的內容區塊把 Footer 擠到最下面 */
+  display: flex;
+  flex-direction: column; 
 }
 /* ========================================= */
 
