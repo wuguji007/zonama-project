@@ -217,7 +217,7 @@ const loadCartData = async () => {
   return (
     <div>
       {/* Header */}
-      <header className="simple-header pt-0">
+      <header className="simple-header pt-0 shadow-sm">
         <div className="container d-flex justify-content-between align-items-center">
           <div className="logo small">
             ZONAMA <span>購物車</span>
