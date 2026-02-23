@@ -163,10 +163,6 @@ export default function Home() {
     const [showMenu, setShowMenu] = useState(false);
     const GCS_JSON_URL = "https://storage.googleapis.com/zonama-project-assets/products.json";
     
-    useEffect(() => {
-        fetchData();
-    }, []);
-    
     const fetchData = async () => {
         try {
             const cacheBuster = `?t=$(new Date().getTime())`; // 加上時間戳避免快取
@@ -179,12 +175,15 @@ export default function Home() {
         }
     };
     
-    
+    useEffect(() => {
+        fetchData();
+    }, []);
+
     // 限時搶購商品
     const flashSaleIds = [1,8,9,12,15,16,2,3];
     const flashSaleProducts = flashSaleIds
-    .map(id => productData.find(item => item.id === id))
-    .filter(item => item !== undefined); 
+        .map(id => productData.find(item => item.id === id))
+        .filter(item => item !== undefined); 
     
     // 熱銷商品
     const bestSellerIds = [20, 21, 13, 10, 14, 15, 2, 3];
@@ -220,10 +219,10 @@ export default function Home() {
                             1024: { slidesPerView: 4, spaceBetween: 12 }
                             }}
                         >
-                            {cardSwiperData.map((card) => (
+                            {flashSaleProducts.map((card) => (
                             <SwiperSlide key={card.id} className="swiper-slide">
                                 <div className="card product-card d-flex flex-column justify-content-between h-auto rounded-4 p-3 p-md-5">
-                                    <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
+                                    <img src={card.image} className="card-img-top mb-0 mb-md-4" alt={card.title} />
                                     <div className="d-flex flex-column justify-content-between h-100">
                                         <div className="card-body p-0 mb-4">
                                             <h5 className="card-title fw-bold text-primary-950">{card.title}</h5>                                    
@@ -244,7 +243,7 @@ export default function Home() {
     }
     
     
-    const GreyCardSwiper = () => {
+    const GreyCardSwiper = ({items}) => {
         return (
             <>
                 <div className="row">
@@ -261,12 +260,12 @@ export default function Home() {
                             1024: { slidesPerView: 4, spaceBetween: 12 }
                             }}
                         >
-                            {cardSwiperData.map((card) => (
+                            {items.map((card) => (
                             <SwiperSlide key={card.id} className="swiper-slide">
-                                <div className="card product-card-gray d-flex flex-column justify-content-between h-auto rounded-4 border-0 p-3 p-md-5">
-                                    <img src={`${import.meta.env.BASE_URL}${card.image}`} className="card-img-top mb-0 mb-md-4" alt={card.title} />
+                                <div className="card bg-gray-50 d-flex flex-column justify-content-between h-100 rounded-4 border-0 p-3 p-md-5">
+                                    <img src={card.image} className="card-img-top mb-0 mb-md-4" alt={card.title} />
                                     <div className="d-flex flex-column justify-content-between h-100">
-                                        <div className="card-body p-0 mb-4">
+                                        <div className="card-body p-0">
                                             <h5 className="card-title fw-bold text-primary-950">{card.title}</h5>
                                         </div>
                                         <div className="product-card-footer">
@@ -286,9 +285,9 @@ export default function Home() {
     
     
     //精選推薦區-網格卡片輪播元件
-    const products = cardSwiperData;
+    // const products = cardSwiperData;
     
-    const CardCarousel = () => {
+    const CardCarousel = ({items}) => {
         const [activeIndex, setActiveIndex] = useState(0);
         
         // 拖曳/滑動相關 State (整合滑鼠與觸控)
@@ -304,8 +303,8 @@ export default function Home() {
     
         // 將產品分組(Chunks) 
         const slides = [];
-        for (let i = 0; i < products.length; i += itemsPerSlide) {
-        slides.push(products.slice(i, i + itemsPerSlide));
+        for (let i = 0; i < items.length; i += itemsPerSlide) {
+        slides.push(items.slice(i, i + itemsPerSlide));
         }
     
         const nextSlide = () => {
@@ -431,7 +430,7 @@ export default function Home() {
                                                             <div className="col-6">
                                                                 <div className="card-img-wrapper">
                                                                     <img 
-                                                                    src={`${import.meta.env.BASE_URL}${product.image}`} 
+                                                                    src={product.image}
                                                                     className="card-img-top" 
                                                                     alt={product.title} 
                                                                     />
@@ -575,7 +574,6 @@ export default function Home() {
             hide-scrollbar: 自定義的 CSS class，用來隱藏 X 軸
             */}
 
-
             {/* Hero swiper輪播圖 */} 
             <section className="hero">
                 <HeroSwiper />
@@ -611,7 +609,7 @@ export default function Home() {
                                     </div>
                                 </div>                   
                                 <div>
-                                    <GreyCardSwiper />
+                                    <GreyCardSwiper items={bestSellerProducts} />
                                 </div>
                             </div>
                             <div className="w-100">
@@ -624,7 +622,7 @@ export default function Home() {
                                     </div>
                                 </div>                   
                                 <div>
-                                    <GreyCardSwiper />
+                                    <GreyCardSwiper items={memberOnlyProducts} />
                                 </div>
                             </div>
                         </div>
@@ -665,7 +663,7 @@ export default function Home() {
                             </div> */}
                             {/* 右側網格卡片輪播 */}
                             <div className="col-12 col-md-8">                           
-                                <CardCarousel />                            
+                                <CardCarousel items={PetSuppliesCollection} />                            
                             </div>                        
                         </div>
                     </div>
@@ -693,7 +691,7 @@ export default function Home() {
                             </div>
                             {/* 網格卡片輪播 */}
                             <div className="col-12 col-md-8">                           
-                                <CardCarousel />                            
+                                <CardCarousel items={FoodAndBeverage} />                            
                             </div>                        
                         </div>
                     </div>

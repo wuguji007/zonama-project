@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getCart, updateQuantity, removeCartItem, addToCart, clearInvalidItems, toggleItemSelection } from '../api/cartApi';
 
 const CartPage = () => {
@@ -6,6 +7,8 @@ const CartPage = () => {
   const [cartId, setCartId] = useState(1); // 假設當前用戶 ID
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   // [State] 購物車商品資料
   const [cartItems, setCartItems] = useState([]);
@@ -31,7 +34,7 @@ const loadCartData = async () => {
       setLoading(true);
 
       // 1. 去你的專屬連結把所有商品資料抓下來
-      const response = await fetch('https://storage.googleapis.com/zonama-project-assets/product-list.json');
+      const response = await fetch('https://storage.googleapis.com/zonama-project-assets/products-list.json');
       const products = await response.json();
 
       // 2. 把商品列表打亂（洗牌），然後切出前 3 項
@@ -197,9 +200,14 @@ const loadCartData = async () => {
       console.log('[API Call] 結帳數據:', orderData);
       
       // 臨時模擬結帳成功
-      alert('結帳成功！訂單已提交');
+      // alert('結帳成功！訂單已提交');
       // 可以在此添加跳轉到結帳頁面或訂單確認頁面
-      window.location.href = '#/checkout';
+      // window.location.href = '#/checkout';
+
+
+      // 新增：導向結帳頁面，並透過 state 傳遞 orderData
+      setTimeout(() => navigate('/checkout', { state: { orderData, selectedItem: orderData.items } }), 1500);
+
     } catch (err) {
       console.error('[API Error] 結帳失敗:', err);
       alert('結帳失敗，請重試');
@@ -209,14 +217,16 @@ const loadCartData = async () => {
   return (
     <div>
       {/* Header */}
-      <header className="simple-header">
-        <div className="logo">
-          ZONAMA <span>購物車</span>
-        </div>
-        <div style={{color: '#ccc', fontSize: '14px', display:'flex', gap:'15px'}}>
-          <div style={{color: 'var(--primary-blue)', fontWeight:'bold'}}>1. 訂單明細確認</div>
-          <div>2. 訂購/付款</div>
-          <div>3. 訂購完成</div>
+      <header className="simple-header pt-0">
+        <div className="container d-flex justify-content-between align-items-center">
+          <div className="logo small">
+            ZONAMA <span>購物車</span>
+          </div>
+          <div style={{color: '#ccc', fontSize: '14px', display:'flex', gap:'15px'}}>
+            <div style={{color: 'var(--primary-blue)', fontWeight:'bold'}}>1. 訂單明細確認</div>
+            <div>2. 訂購/付款</div>
+            <div>3. 訂購完成</div>
+          </div>
         </div>
       </header>
 
@@ -226,126 +236,128 @@ const loadCartData = async () => {
 
       {/* Main Content */}
       {!loading && (
-      <div className="cart-container">
-        {/* 左欄 */}
-        <div className="main-content">
-          
-          {/* 有效商品列表 */}
-          <div className="card">
-            <div className="section-header">
-              <span>
-                <input type="checkbox" checked readOnly style={{marginRight: '8px'}} />
-                快速出貨 ({cartItems.length})
-              </span>
-            </div>
-
-            {cartItems.length === 0 ? (
-              <div style={{padding: '20px', textAlign: 'center', color: '#999'}}>購物車是空的</div>
-            ) : (
-              cartItems.map(item => (
-                <div key={item.id} className="cart-item">
-                  <input 
-                    type="checkbox" 
-                    checked={item.selected} 
-                    onChange={() => handleToggleItemSelection(item.id, item.selected)}
-                    style={{marginTop:'5px', width:'18px', height:'18px'}} 
-                  />
-                  <img src={item.image} alt={item.name} className="item-img" />
-                  <div className="item-details">
-                    <div className="item-title">{item.name}</div>
-                    <div className="item-spec">{item.spec}</div>
-                    <div style={{marginBottom:'5px'}}>
-                      <span className="current-price">NT${item.price.toLocaleString()}</span>
-                      <span className="original-price">NT${item.originalPrice.toLocaleString()}</span>
-                    </div>
-                    <div className="delivery-info">{item.delivery}</div>
-                  </div>
-                  <div className="item-actions">
-                    <button className="delete-btn" onClick={() => handleRemoveItem(item.id)}>🗑</button>
-                    <div className="quantity-selector">
-                      <button className="qty-btn" onClick={() => handleQuantityChange(item.id, -1)}>-</button>
-                      <input type="text" className="qty-input" value={item.quantity} readOnly />
-                      <button className="qty-btn" onClick={() => handleQuantityChange(item.id, 1)}>+</button>
-                    </div>
-                  </div>
+        <div className='bg-gray-50 pt-4'>
+          <div className="cart-container">
+            {/* 左欄 */}
+            <div className="main-content h-100">
+              
+              {/* 有效商品列表 */}
+              <div className="card h-auto">
+                <div className="section-header">
+                  <span>
+                    <input type="checkbox" checked readOnly style={{marginRight: '8px'}} />
+                    快速出貨 ({cartItems.length})
+                  </span>
                 </div>
-              ))
-            )}
-          </div>
 
-          {/* 失效商品區 */}
-          {invalidItems.length > 0 && (
-            <div className="card invalid-section">
-              <div className="section-header">
-                <span>失效商品 ({invalidItems.length})</span>
-                <button className="remove-all-btn" onClick={handleClearInvalidItems}>移除全部</button>
+                {cartItems.length === 0 ? (
+                  <div style={{padding: '20px', textAlign: 'center', color: '#999'}}>購物車是空的</div>
+                  ) : (                 
+                  cartItems.map(item => (
+                    <div key={item.id} className="cart-item">
+                      <input 
+                        type="checkbox" 
+                        checked={item.selected} 
+                        onChange={() => handleToggleItemSelection(item.id, item.selected)}
+                        style={{marginTop:'5px', width:'18px', height:'18px'}} 
+                      />
+                      <img src={item.image} alt={item.name} className="item-img" />
+                      <div className="item-details">
+                        <div className="item-title">{item.name}</div>
+                        <div className="item-spec">{item.spec}</div>
+                        <div style={{marginBottom:'5px'}}>
+                          <span className="current-price">NT${item.price.toLocaleString()}</span>
+                          <span className="original-price">NT${item.originalPrice.toLocaleString()}</span>
+                        </div>
+                        <div className="delivery-info">{item.delivery}</div>
+                      </div>
+                      <div className="item-actions">
+                        <button className="delete-btn" onClick={() => handleRemoveItem(item.id)}>🗑</button>
+                        <div className="quantity-selector">
+                          <button className="qty-btn" onClick={() => handleQuantityChange(item.id, -1)}>-</button>
+                          <input type="text" className="qty-input" value={item.quantity} readOnly />
+                          <button className="qty-btn" onClick={() => handleQuantityChange(item.id, 1)}>+</button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
-              {invalidItems.map(item => (
-                <div key={item.id} className="cart-item">
-                  <div style={{width:'18px'}}></div>
-                  <img src={item.image} alt={item.name} className="item-img" style={{filter:'grayscale(100%)'}} />
-                  <div className="item-details">
-                    <div className="item-title" style={{color:'#999'}}>{item.name}</div>
-                    <div className="item-spec">{item.spec}</div>
-                    <div>
-                      <span className="current-price" style={{color:'#999'}}>NT${item.price.toLocaleString()}</span>
+
+              {/* 失效商品區 */}
+              {invalidItems.length > 0 && (
+                <div className="card invalid-section h-auto">
+                  <div className="section-header">
+                    <span>失效商品 ({invalidItems.length})</span>
+                    <button className="remove-all-btn" onClick={handleClearInvalidItems}>移除全部</button>
+                  </div>
+                  {invalidItems.map(item => (
+                    <div key={item.id} className="cart-item">
+                      <div style={{width:'18px'}}></div>
+                      <img src={item.image} alt={item.name} className="item-img" style={{filter:'grayscale(100%)'}} />
+                      <div className="item-details">
+                        <div className="item-title" style={{color:'#999'}}>{item.name}</div>
+                        <div className="item-spec">{item.spec}</div>
+                        <div>
+                          <span className="current-price" style={{color:'#999'}}>NT${item.price.toLocaleString()}</span>
+                        </div>
+                      </div>
+                      <div className="item-actions">
+                        <button className="delete-btn" onClick={() => handleRemoveItem(item.id)}>🗑</button>
+                      </div>
                     </div>
-                  </div>
-                  <div className="item-actions">
-                    <button className="delete-btn" onClick={() => handleRemoveItem(item.id)}>🗑</button>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
+              )}
 
-          {/* 推薦商品 */}
-          <div className="card">
-            <div className="section-header">顧客也經常一起買...</div>
-            <div className="recommendation-grid">
-              {recommendations.map(rec => (
-                <div key={rec.id} className="rec-item">
-                  <img src="https://placehold.co/100" alt={rec.name} className="rec-img" />
-                  <div className="item-title" style={{fontSize:'13px', height:'38px', overflow:'hidden'}}>{rec.name}</div>
-                  <div className="current-price" style={{fontSize:'14px'}}>NT${rec.price.toLocaleString()}</div>
-                  <button className="rec-btn" onClick={() => handleAddRecommendation(rec)}>加入購物車</button>
+              {/* 推薦商品 */}
+              <div className="card h-auto">
+                <div className="section-header">顧客也經常一起買...</div>
+                <div className="recommendation-grid">
+                  {recommendations.map(rec => (
+                    <div key={rec.id} className="rec-item">
+                      <img src="https://placehold.co/100" alt={rec.name} className="rec-img" />
+                      <div className="item-title" style={{fontSize:'13px', height:'38px', overflow:'hidden'}}>{rec.name}</div>
+                      <div className="current-price" style={{fontSize:'14px'}}>NT${rec.price.toLocaleString()}</div>
+                      <button className="rec-btn" onClick={() => handleAddRecommendation(rec)}>加入購物車</button>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            </div>
+
+            {/* 右欄：結帳明細 */}
+            <div className="sidebar">
+              <div className="card h-auto summary-card">
+                <div className="section-header">結帳明細</div>
+                <div className="summary-row">
+                  <span>商品總金額</span>
+                  <span>NT${subtotal.toLocaleString()}</span>
+                </div>
+                <div className="summary-row">
+                  <span>運費</span>
+                  <span>NT${shippingFee}</span>
+                </div>
+                <div className="summary-row">
+                  <span style={{color:'var(--primary-blue)'}}>優惠搭配滿額扣抵</span>
+                  <span>-NT${discount}</span>
+                </div>
+                <div className="summary-total">
+                  <span>總金額 ({selectedItems.reduce((acc, i)=>acc+i.quantity, 0)}件商品)</span>
+                  <span>NT${total.toLocaleString()}</span>
+                </div>
+                
+                <button className="checkout-btn" onClick={handleCheckout}>結帳</button>
+
+                {diffForFreeShipping > 0 ? (
+                  <div className="free-shipping-hint">還差 NT${diffForFreeShipping.toLocaleString()} 可享免運優惠</div>
+                ) : (
+                  <div className="free-shipping-hint">已達免運門檻！</div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-
-        {/* 右欄：結帳明細 */}
-        <div className="sidebar">
-          <div className="card summary-card">
-            <div className="section-header">結帳明細</div>
-            <div className="summary-row">
-              <span>商品總金額</span>
-              <span>NT${subtotal.toLocaleString()}</span>
-            </div>
-            <div className="summary-row">
-              <span>運費</span>
-              <span>NT${shippingFee}</span>
-            </div>
-            <div className="summary-row">
-              <span style={{color:'var(--primary-blue)'}}>優惠搭配滿額扣抵</span>
-              <span>-NT${discount}</span>
-            </div>
-            <div className="summary-total">
-              <span>總金額 ({selectedItems.reduce((acc, i)=>acc+i.quantity, 0)}件商品)</span>
-              <span>NT${total.toLocaleString()}</span>
-            </div>
-            
-            <button className="checkout-btn" onClick={handleCheckout}>結帳</button>
-
-            {diffForFreeShipping > 0 ? (
-               <div className="free-shipping-hint">還差 NT${diffForFreeShipping.toLocaleString()} 可享免運優惠</div>
-            ) : (
-               <div className="free-shipping-hint">已達免運門檻！</div>
-            )}
-          </div>
-        </div>
-      </div>
       )}
 
       {/* Footer */}

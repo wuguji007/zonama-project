@@ -9,6 +9,8 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage.jsx';
 import ResetPasswordPage from './pages/ResetPasswordPage.jsx';
 import MemberCenter from './pages/MemberCenter.jsx';
 import CartPage from './pages/CartPage.jsx';
+import CheckoutPage from './pages/CheckoutPage.jsx';
+import PaymentCompletePage from './pages/PaymentCompletePage.jsx';
 import FoodBeverage from './pages/FoodBeverage.jsx';
 import { useState } from 'react';
 
@@ -33,6 +35,19 @@ function App() {
     return children;
   };  
 
+  // 結帳表單相關
+  const [merchantOrderNo] = useState(`ZNM${Date.now()}`);
+  const [formData, setFormData] = useState({
+    receiverName: '',
+    phone: '',
+    email: '',
+    address: '',
+  });
+
+  // 重置資料
+  const handleReset = () => {
+    setFormData({ receiverName: '', phone: '', email: '', address: '' });
+  };
 
   return (
     <>
@@ -57,8 +72,32 @@ function App() {
                 // <ProtectedRoute>
                 
                 // </ProtectedRoute>
-              } />
-              
+              }
+            />
+
+            <Route
+              path='/checkout'
+              element={
+                <CheckoutPage
+                  formData={formData}
+                  setFormData={setFormData}
+                  merchantOrderNo={merchantOrderNo}
+                />
+              }
+            />
+
+            <Route
+              path='/payment-complete' 
+              element={
+                <PaymentCompletePage
+                  formData={formData}
+                  merchantOrderNo={merchantOrderNo}
+                  onReset={handleReset}
+                />
+              }
+            />
+
+
           </Routes>
         </div>
         <Footer/>
