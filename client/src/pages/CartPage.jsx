@@ -214,19 +214,37 @@ const loadCartData = async () => {
     }
   };
 
-  return (
+return (
     <div>
-      {/* Header */}
-      <header className="simple-header pt-0 shadow-sm">
-        <div className="container d-flex justify-content-between align-items-center">
-          <div className="logo small">
-            ZONAMA <span>購物車</span>
+      {/* ✨ Header 結構大改造 ✨ */}
+      <header className="simple-header shadow-sm bg-white">
+        <div className="container header-inner">
+          
+          {/* 上半部：Logo 與標題 */}
+          <div className="logo-section">
+            <img src="/zonama-logo-sm.svg" alt="Z" className="mobile-logo" />
+            <span className="brand-name">ZONAMA</span>
+            <span className="cart-title">購物車</span>
           </div>
-          <div style={{color: '#ccc', fontSize: '14px', display:'flex', gap:'15px'}}>
-            <div style={{color: 'var(--primary-blue)', fontWeight:'bold'}}>1. 訂單明細確認</div>
-            <div>2. 訂購/付款</div>
-            <div>3. 訂購完成</div>
+          
+          {/* 下半部：進度條 */}
+          <div className="stepper-container">
+            <div className="step active">
+              <span className="step-badge">1</span>
+              <span className="step-text">訂單明細確認</span>
+            </div>
+            <div className="step-dash">—</div>
+            <div className="step">
+              <span className="step-badge">2</span>
+              <span className="step-text">訂購/付款</span>
+            </div>
+            <div className="step-dash">—</div>
+            <div className="step">
+              <span className="step-badge">3</span>
+              <span className="step-text">訂購完成</span>
+            </div>
           </div>
+
         </div>
       </header>
 
@@ -335,25 +353,33 @@ const loadCartData = async () => {
                   <span>NT${subtotal.toLocaleString()}</span>
                 </div>
                 <div className="summary-row">
-                  <span>運費</span>
+                  <span>宅配運費</span>
                   <span>NT${shippingFee}</span>
                 </div>
-                <div className="summary-row">
-                  <span style={{color:'var(--primary-blue)'}}>優惠搭配滿額扣抵</span>
-                  <span>-NT${discount}</span>
+                
+                {/* 截圖中新增的：選擇優惠或輸入代碼 */}
+                <div className="summary-row" style={{ marginTop: '5px', marginBottom: '15px' }}>
+                  <a href="#" style={{ color: 'var(--primary-blue)', textDecoration: 'none', fontSize: '14px' }}>
+                    選擇優惠或輸入代碼
+                  </a>
                 </div>
-                <div className="summary-total">
-                  <span>總金額 ({selectedItems.reduce((acc, i)=>acc+i.quantity, 0)}件商品)</span>
+
+                {/* 分隔線 */}
+                <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '15px 0' }} />
+
+                <div className="summary-total" style={{ borderTop: 'none', marginTop: '0', paddingTop: '0' }}>
+                  <span style={{ color: '#333' }}>總金額 ({selectedItems.reduce((acc, i)=>acc+i.quantity, 0)}件商品)</span>
                   <span>NT${total.toLocaleString()}</span>
                 </div>
                 
                 <button className="checkout-btn" onClick={handleCheckout}>結帳</button>
 
-                {diffForFreeShipping > 0 ? (
+                {/* 電腦版可顯示的免運提示，您可依需求決定是否保留 */}
+                {/* {diffForFreeShipping > 0 ? (
                   <div className="free-shipping-hint">還差 NT${diffForFreeShipping.toLocaleString()} 可享免運優惠</div>
                 ) : (
                   <div className="free-shipping-hint">已達免運門檻！</div>
-                )}
+                )} */}
               </div>
             </div>
           </div>
