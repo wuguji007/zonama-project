@@ -94,14 +94,14 @@ export default function Verify({email}) {
                             返回註冊
                             </button>
                             
-                            <div className="card shadow-lg border-0">
-                                <div className="card-body p-4 p-md-5">
-                                    <div className="text-center my-5">
+                            <div className="card h-auto shadow-lg rounded-5 border-0">
+                                <div className="card-body p-4">
+                                    <div className="text-center mb-4">
                                         <div className="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-4 mb-3">
                                             <Mail size={56} className="text-primary" />
                                         </div>
                                         <h2 className="fw-bold text-primary-950 mb-2">驗證您的信箱</h2>
-                                        <p className="text-primary small mb-2">請輸入您信箱收到的 6 位數驗證碼</p>
+                                        <p className="text-primary small mb-4">請輸入您信箱收到的 6 位數驗證碼</p>
                                         {/* <p className="text-primary fw-semibold mb-1">{userEmail}</p>
                                         <p className="text-muted small">的 6 位數驗證碼</p> */}
                                     </div>
@@ -128,7 +128,7 @@ export default function Verify({email}) {
                                                 inputMode="numeric"
                                             />
                                             <small className="text-muted d-block text-center mt-2">
-                                                驗證碼有效期限: 30 分鐘
+                                                驗證碼有效期限: 10 分鐘
                                             </small>
                                         </div>
 
@@ -166,7 +166,7 @@ export default function Verify({email}) {
                                     </form>
 
                                     {/* 提示卡片 */}
-                                    <div className="mt-4 alert alert-info m-0">
+                                    <div className="alert alert-info mb-2">
                                         <small>
                                             <CircleAlert size={18} className='text-danger mb-1' />
                                             <strong className='ms-2'>提示:</strong> 請檢查垃圾郵件資料夾,有時驗證碼郵件可能會被誤判。

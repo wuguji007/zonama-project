@@ -1,0 +1,295 @@
+// 引入您的共用變數 (請確認路徑正確)
+// @import '../assets/variables'; 
+
+// 顏色變數預設 (防呆備用，若已在 _variables.scss 定義可刪除)
+$primary: #24769a !default;
+$info: #17a2b8 !default;
+$gray-100: #f8f9fa !default;
+$gray-300: #dee2e6 !default;
+$gray-500: #adb5bd !default;
+$blue-50: #effafc !default;
+
+.product-list-page {
+  background-color: #fff;
+  min-height: 100vh;
+
+  /* --- 麵包屑導覽 --- */
+  .custom-breadcrumb {
+    .breadcrumb-item {
+      font-size: 13px;
+      a {
+        color: $gray-500;
+        text-decoration: none;
+        &:hover { color: $primary; }
+      }
+      &.active {
+        color: $primary;
+        font-weight: 500;
+      }
+    }
+    .breadcrumb-item + .breadcrumb-item::before {
+      content: ">";
+      color: $gray-500;
+    }
+  }
+
+  /* --- Banner 區塊 --- */
+  .brand-banner {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 300px; // 桌機版高度
+    
+    .banner-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.7); // 讓背景暗一點以凸顯文字
+    }
+
+    .banner-text-overlay {
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      transform: translateY(-50%);
+      
+      .shadow-text {
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+      }
+    }
+  }
+
+  /* --- 標題區塊 --- */
+  .section-title-wrapper {
+    border-bottom: 2px solid $gray-100;
+    padding-bottom: 10px;
+    
+    .text-info {
+      font-size: 14px;
+      vertical-align: top;
+      color: #36c5d6 !important; // 對齊設計稿的淺藍色
+    }
+    .section-title {
+      font-size: 24px;
+      color: #333;
+    }
+  }
+
+  /* --- 共用商品卡片樣式 --- */
+  .product-card {
+    border: none;
+    background: #fff;
+    transition: transform 0.2s ease;
+    height: 100%;
+
+    &:hover {
+      transform: translateY(-3px);
+      .card-img-wrapper img {
+        transform: scale(1.05);
+      }
+    }
+
+    .card-img-wrapper {
+      background-color: #fcfcfc;
+      border-radius: 8px;
+      overflow: hidden;
+      padding: 10px;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+      }
+    }
+
+    .product-title {
+      font-size: 15px;
+      color: #333;
+      margin-bottom: 8px;
+      line-height: 1.4;
+      font-weight: 500;
+      display: -webkit-box;
+      -webkit-line-clamp: 2; /* 限制顯示兩行 */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .current-price {
+      font-size: 16px;
+      color: #333;
+    }
+
+    .original-price {
+      font-size: 13px;
+    }
+
+    .btn-add-cart {
+      background-color: $primary;
+      color: white;
+      border-radius: 20px;
+      font-size: 14px;
+      padding: 8px 0;
+      font-weight: 500;
+      transition: background-color 0.2s;
+      
+      &:hover {
+        background-color: darken($primary, 10%);
+        color: white;
+      }
+    }
+  }
+
+  /* --- 分類標籤 Tabs --- */
+  .filter-tabs-container {
+    .custom-tabs {
+      border-bottom: 1px solid $gray-300;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      
+      .nav-item {
+        margin-bottom: -1px;
+        white-space: nowrap;
+      }
+      
+      .nav-link {
+        border: none;
+        color: #666;
+        padding: 12px 24px;
+        font-weight: 500;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+
+        &:hover {
+          color: $primary;
+        }
+
+        &.active {
+          color: $primary;
+          background-color: transparent;
+          border-bottom: 3px solid $primary;
+        }
+      }
+    }
+  }
+
+  /* --- 分頁 Pagination --- */
+  .custom-pagination {
+    .page-item {
+      margin: 0 4px;
+
+      .page-link {
+        border: none;
+        color: #666;
+        border-radius: 4px;
+        padding: 8px 14px;
+        font-weight: 500;
+        background-color: transparent;
+
+        &:hover {
+          background-color: $gray-100;
+          color: $primary;
+        }
+      }
+
+      &.active .page-link {
+        background-color: $primary;
+        color: white;
+      }
+
+      &.disabled .page-link {
+        color: $gray-300;
+        background-color: transparent;
+      }
+    }
+  }
+
+  /* =========================================
+     手機版 RWD (Mobile Responsive) < 768px
+     ========================================= */
+  @media (max-width: 768px) {
+    /* Banner 變小 */
+    .brand-banner {
+      height: 160px;
+      border-radius: 0; // 手機版通常貼齊邊緣
+      margin-left: -15px; // 抵銷 container padding
+      margin-right: -15px;
+      width: calc(100% + 30px);
+      
+      .banner-text-overlay {
+        left: 5%;
+        h1 { font-size: 20px; }
+        p { font-size: 14px; }
+      }
+    }
+
+    /* 隱藏捲軸 */
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* 手機版：下方主要商品改為「左圖右文」的列表排版 (如圖二) */
+    .main-list-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0 !important; // 移除 Bootstrap 預設 gap
+      border-top: 1px solid $gray-300;
+      
+      .col-12 {
+        padding: 0;
+      }
+
+      .main-list-card {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid $gray-300;
+        border-radius: 0;
+        
+        &:hover {
+          transform: none; // 手機版移除上浮效果
+        }
+
+        .card-img-wrapper {
+          width: 100px;
+          height: 100px;
+          flex-shrink: 0;
+          padding: 5px;
+          background: transparent;
+        }
+
+        .card-body {
+          padding: 0 10px 0 15px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: flex-start;
+          width: 100%;
+
+          .product-title {
+            font-size: 14px;
+            margin-bottom: 4px;
+            font-weight: 700;
+          }
+
+          .price-block {
+            margin-top: auto;
+            .current-price {
+              font-size: 15px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

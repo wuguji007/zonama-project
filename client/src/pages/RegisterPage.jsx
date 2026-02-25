@@ -13,8 +13,8 @@ export default function Register({setVerificationEmail}) {
         confirmPassword: '',
     });
 
-    const [errors, setErrors] = useState({}); // 錯誤狀態
-    const [passwordStrength, setPasswordStrength] = useState({ level: 0, text: '', color: '' }); // 密碼強度
+    // const [errors, setErrors] = useState({}); // 錯誤狀態
+    // const [passwordStrength, setPasswordStrength] = useState({ level: 0, text: '', color: '' }); // 密碼強度
     const [showPassword, setShowPassword] = useState(false);
     const [showCheckPassword, setShowCheckPassword] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
@@ -84,9 +84,9 @@ export default function Register({setVerificationEmail}) {
                             返回首頁 
                             </button>
                             
-                            <div className="card shadow-lg border-0 h-auto">
+                            <div className="card shadow-lg rounded-5 border-0 h-auto">
                                 <div className="card-body p-4 p-md-5">
-                                    <div className="text-center my-4">
+                                    <div className="text-center mb-4">
                                         <div className="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
                                             <User size={48} className="text-primary" />
                                         </div>

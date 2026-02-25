@@ -3,7 +3,7 @@
     {
       "id": 1,
       "email": "test@gmail.com",
-      "password": "123456",
+      "password": "$2a$10$EiXXtGuS3wTCu6zNsLyadudar.bzqX4gltgkAB0gXsBPZEEbUAq9W",
       "name": "測試會員",
       "isVerified": true,
       "createdAt": "2026-02-25T10:00:00.000Z"
@@ -11,48 +11,60 @@
     {
       "id": 2,
       "email": "demo@gmail.com",
-      "password": "123456",
+      "password": "$2a$10$EiXXtGuS3wTCu6zNsLyadudar.bzqX4gltgkAB0gXsBPZEEbUAq9W",
       "name": "Demo 使用者",
       "isVerified": false
     },
     {
+      "id": 3,
       "email": "test2@gmail.com",
       "password": "$2a$10$EiXXtGuS3wTCu6zNsLyadudar.bzqX4gltgkAB0gXsBPZEEbUAq9W",
       "name": "測試2",
-      "isVerified": true,
-      "id": 3
+      "isVerified": true
     }
   ],
   "products": [
+    { "id": 1, "name": "經典白T恤", "price": 500 },
+    { "id": 2, "name": "牛仔褲", "price": 1200 },
+
     {
-      "id": 1,
-      "name": "經典白T恤",
-      "price": 500,
-      "image": "https://via.placeholder.com/300x300",
-      "description": "100% 純棉舒適百搭",
-      "stock": 50
+      "id": 101,
+      "name": "寵愛營養配方貓飼料2包-獨家配方",
+      "spec": "規格：包",
+      "price": 369,
+      "originalPrice": 1099,
+      "image": "https://placehold.co/100",
+      "delivery": "下單後，商品預計 2026/01/29 出貨(15天後)"
     },
     {
-      "id": 2,
-      "name": "牛仔褲",
-      "price": 1200,
-      "image": "https://via.placeholder.com/300x300",
-      "description": "修身剪裁，彈性布料",
-      "stock": 30
+      "id": 102,
+      "name": "麻辣燙湯底方塊2包-獨家配方",
+      "spec": "規格：一箱入",
+      "price": 899,
+      "originalPrice": 1399,
+      "image": "https://placehold.co/100",
+      "delivery": "下單後，由廠商直接出貨"
+    },
+    {
+      "id": 999,
+      "name": "無線藍牙耳罩式耳機",
+      "spec": "規格：黑金色",
+      "price": 6899,
+      "originalPrice": 11099,
+      "image": "https://placehold.co/100"
     }
   ],
-  "orders": [
+  "carts": [
     {
       "id": 1,
       "userId": 1,
       "items": [
-        {
-          "productId": 1,
-          "quantity": 2
-        }
+        { "productId": 101, "quantity": 1, "selected": true },
+        { "productId": 102, "quantity": 1, "selected": true }
       ],
-      "total": 1000,
-      "createdAt": "2026-02-25T10:30:00.000Z"
+      "invalidItemIds": [999],
+      "createdAt": "2026-02-25T10:30:00.000Z",
+      "updatedAt": "2026-02-25T10:30:00.000Z"
     }
   ]
 }

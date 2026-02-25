@@ -8,6 +8,8 @@
 @import '../assets/registerpage.scss';
 @import '../assets/hero-swiper.scss';
 @import '../assets/back-to-top.scss';
+@import '../assets/cartpage.scss';
+@import '../assets/foodbeverage.scss';
 
 *,
 *::before,
@@ -19,7 +21,11 @@ body {
   font-family: "Noto Sans TC", sans-serif;
   line-height: 1.2;
   letter-spacing: 2px;
+  margin: 0; /* 加上這行確保沒有多餘邊距 */
+  padding: 0;
 }
+
+
 
 a {
   text-decoration: none;
@@ -125,3 +131,7 @@ h1 {
   }
 }
 
+.form-control::placeholder {
+  color: $gray-300;
+  opacity: 1;
+}

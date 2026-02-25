@@ -79,7 +79,7 @@ export default function ResetPassword() {
                                 返回登入
                             </button>
                             
-                            <div className="card shadow-lg border-0 h-auto">
+                            <div className="card shadow-lg rounded-5 border-0 h-auto">
                                 <div className="card-body p-4 p-md-5">
                                     <div className="text-center mt-4 mb-5">
                                         <div className="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">

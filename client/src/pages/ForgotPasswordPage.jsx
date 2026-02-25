@@ -44,9 +44,9 @@ export default function ForgotPassword() {
                             返回登入
                             </button>
                             
-                            <div className="card shadow-lg border-0 h-auto">
+                            <div className="card shadow-lg rounded-5 border-0 h-auto">
                                 <div className="card-body p-4 p-md-5">
-                                    <div className="text-center my-4">
+                                    <div className="text-center mb-4">
                                         <div className="bg-primary bg-opacity-10 rounded-circle d-inline-flex p-3 mb-3">
                                             <Lock size={48} className="text-primary" />
                                         </div>
@@ -87,7 +87,7 @@ export default function ForgotPassword() {
                                         <button
                                             type="submit"
                                             disabled={isLoading}
-                                            className="btn btn-primary w-100 py-3 fw-semibold mb-6"
+                                            className="btn btn-primary w-100 py-3 fw-semibold mb-2"
                                         >
                                             {isLoading ? (
                                             <>
