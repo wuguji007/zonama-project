@@ -7,7 +7,13 @@ const CartPage = () => {
   // ✨ 改從全域 Context 取得購物車資料 ✨
   const { cartItems, setCartItems } = useCart();
   const [invalidItems, setInvalidItems] = useState([]); // 暫不處理失效商品
-
+  // [State] 推薦商品
+  const recommendations = [
+    { id: 201, name: '防水狗狗雨衣', price: 399 },
+    { id: 202, name: '貓咪悠閒玩具組', price: 789 },
+    { id: 203, name: '狗狗雞肉口味主食罐', price: 1499 },
+    { id: 204, name: '寵物專用飲水機', price: 1200 }
+  ];
   const handleQuantityChange = (id, delta) => {
     setCartItems(prevItems => 
       prevItems.map(item => {
@@ -109,6 +115,7 @@ const CartPage = () => {
                         <span className="current-price">NT${item.price.toLocaleString()}</span>
                       </div>
                     </div>
+                    
                     <div className="item-actions">
                       <button className="delete-btn" onClick={() => handleRemoveItem(item.id)}>🗑</button>
                       <div className="quantity-selector">
@@ -134,12 +141,25 @@ const CartPage = () => {
                 <span>宅配運費</span>
                 <span>NT${shippingFee}</span>
               </div>
+
+              {/* 截圖中新增的：選擇優惠或輸入代碼 */}
+              <div className="summary-row" style={{ marginTop: '5px', marginBottom: '15px' }}>
+                <a href="#" style={{ color: 'var(--primary-blue)', textDecoration: 'none', fontSize: '14px' }}>
+                  選擇優惠或輸入代碼
+                </a>
+              </div>
+
+              {/* 分隔線 */}
               <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '15px 0' }} />
+
               <div className="summary-total" style={{ borderTop: 'none', marginTop: '0', paddingTop: '0' }}>
                 <span style={{ color: '#333' }}>總金額</span>
                 <span>NT${total.toLocaleString()}</span>
               </div>
+
               <button className="checkout-btn" onClick={handleCheckout}>前往結帳</button>
+              
+              
             </div>
           </div>
         </div>

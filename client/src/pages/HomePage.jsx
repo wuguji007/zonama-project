@@ -4,6 +4,8 @@ import HeroSwiper from "../components/HeroSwiper.jsx";
 import BackToTop from '../components/BackToTop.jsx';
 import { getImageUrl } from "../utils/imageHelper.js";
 import { ChevronLeft, ChevronRight, ShoppingCart, Cat, CookingPot } from 'lucide-react';
+// ✨ 引入購物車 Context ✨
+import { useCart } from '../context/CartContext.jsx';
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -161,6 +163,9 @@ const cardSwiperData = [
 export default function Home() {
     const [productData, setProductData] = useState([]);
     const [showMenu, setShowMenu] = useState(false);
+
+    // ✨ 取得加入購物車的方法 ✨
+    const { addToCart } = useCart();
     const GCS_JSON_URL = "https://storage.googleapis.com/zonama-project-assets/products.json";
     
     const fetchData = async () => {
@@ -229,7 +234,12 @@ export default function Home() {
                                         </div>
                                         <div className="product-card-footer">
                                             <p className="card-text text-primary-950">NT${card.price} <del className="text-gray-300 fs-6 fw-normal">NT${card.origin_price}</del></p>
-                                            <button className="btn btn-primary fw-bold py-4 rounded-pill w-100">加入購物車</button>
+                                            {/* ✨ 綁定按鈕 ✨ */}
+                                            <button 
+                                            className="btn btn-primary fw-bold py-4 rounded-pill w-100"
+                                            onClick={() => addToCart(card)}
+                                            >加入購物車
+                                            </button>
                                         </div>
                                     </div>                                   
                                 </div>                  
@@ -270,7 +280,12 @@ export default function Home() {
                                         </div>
                                         <div className="product-card-footer">
                                             <p className="card-text text-primary-950">NT${card.price} <del className="text-gray-300 fs-5 fw-normal">NT${card.origin_price}</del></p>
-                                            <button className="card-btn btn btn-primary fw-bold py-3 py-md-4 rounded-pill w-100">加入購物車</button>                                            
+                                            {/* ✨ 綁定按鈕 ✨ */}
+                                            <button 
+                                            className="card-btn btn btn-primary fw-bold py-3 py-md-4 rounded-pill w-100"
+                                            onClick={() => addToCart(card)}
+                                            >加入購物車
+                                            </button>                                            
                                         </div>                                            
                                     </div>
                                 </div>
@@ -408,7 +423,7 @@ export default function Home() {
                         >
                         <ChevronRight size={24} color="#333" />
                         </button>
-                           
+                        
                         <div className="carousel-inner">
                             {slides.map((slideProducts, slideIndex) => (
                                 <div 
@@ -446,8 +461,12 @@ export default function Home() {
                                                                             <span className="text-primary-950 fw-bold fs-4">NT${product.price}</span>
                                                                             <del className='text-gray-300 fs-6 fs-md-5 mb-2'>${product.origin_price}</del>
                                                                         </div>
-                                                                        <button className="btn btn-add-cart text-white fw-bold btn-sm rounded-pill w-100 py-3 d-flex align-items-center shadow-sm d-none d-md-block" style={{ fontSize: '0.8rem' }}>
-                                                                            加入購物車
+                                                                        {/* ✨ 綁定按鈕 ✨ */}
+                                                                        <button 
+                                                                            className="btn btn-add-cart text-white fw-bold btn-sm rounded-pill w-100 py-3 d-flex align-items-center justify-content-center shadow-sm d-none d-md-flex" 
+                                                                            style={{ fontSize: '0.8rem' }}
+                                                                            onClick={() => addToCart(product)}
+                                                                        >加入購物車
                                                                         </button>
                                                                         {/* <button className="btn bg-primary text-white btn-sm rounded-circle px-2 py-2 d-flex align-items-center shadow-sm d-block d-md-none" style={{ fontSize: '0.8rem' }}>
                                                                         <ShoppingCart size={20} className="" />
