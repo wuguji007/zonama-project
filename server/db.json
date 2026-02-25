@@ -1,7 +1,58 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": 1,
+      "email": "test@gmail.com",
+      "password": "123456",
+      "name": "測試會員",
+      "isVerified": true,
+      "createdAt": "2026-02-25T10:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "email": "demo@gmail.com",
+      "password": "123456",
+      "name": "Demo 使用者",
+      "isVerified": false
+    },
+    {
+      "email": "test2@gmail.com",
+      "password": "$2a$10$EiXXtGuS3wTCu6zNsLyadudar.bzqX4gltgkAB0gXsBPZEEbUAq9W",
+      "name": "測試2",
+      "isVerified": true,
+      "id": 3
+    }
+  ],
   "products": [
-    { "id": 1, "name": "經典白T恤", "price": 500 },
-    { "id": 2, "name": "牛仔褲", "price": 1200 }
+    {
+      "id": 1,
+      "name": "經典白T恤",
+      "price": 500,
+      "image": "https://via.placeholder.com/300x300",
+      "description": "100% 純棉舒適百搭",
+      "stock": 50
+    },
+    {
+      "id": 2,
+      "name": "牛仔褲",
+      "price": 1200,
+      "image": "https://via.placeholder.com/300x300",
+      "description": "修身剪裁，彈性布料",
+      "stock": 30
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "userId": 1,
+      "items": [
+        {
+          "productId": 1,
+          "quantity": 2
+        }
+      ],
+      "total": 1000,
+      "createdAt": "2026-02-25T10:30:00.000Z"
+    }
   ]
 }
