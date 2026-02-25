@@ -9,11 +9,15 @@ import App from './App.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import './assets/all.scss'
+// 引入 CartProvider
+import { CartProvider } from './context/CartContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <HashRouter>
-      <App />
+      <CartProvider> {/* 用 CartProvider 包裹 App */}
+        <App />
+      </CartProvider>
     </HashRouter>
   </StrictMode>,
 )

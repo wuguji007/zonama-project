@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 export default function FoodBeverage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('全部商品');
   const navigate = useNavigate();
+  const { addToCart } = useCart(); // 引入加入購物車功能
 
   // 分類標籤假資料
   const tabs = ['全部商品', '泡麵/麵條', '微波加熱', '休閒零食'];
@@ -14,11 +16,9 @@ export default function FoodBeverage() {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        // 抓取您提供的 JSON 資料
         const response = await fetch('https://storage.googleapis.com/zonama-project-assets/product-list.json');
         const data = await response.json();
         
-        // 整理資料格式以防 JSON 欄位命名不一致
         const formattedData = data.map(item => ({
           id: item.id || Math.random().toString(),
           title: item.title || item.name || '農心精選商品',
@@ -38,9 +38,7 @@ export default function FoodBeverage() {
     fetchProducts();
   }, []);
 
-  // 模擬新品：取前 4 筆
   const newProducts = products.slice(0, 4);
-  // 模擬主列表商品
   const mainProducts = products;
 
   return (
@@ -74,7 +72,7 @@ export default function FoodBeverage() {
             <span className="text-info fw-bold me-2" style={{color: '#36c5d6'}}>NEW!</span>
             <h3 className="section-title d-inline-block fw-bold mb-0">品牌新品</h3>
           </div>
-          
+
           <div className="row g-3">
             {loading ? (
               <p className="text-center w-100">載入中...</p>
@@ -93,6 +91,13 @@ export default function FoodBeverage() {
                           ${product.originalPrice}
                         </span>
                       </div>
+                      {/* ✨ 在新品區塊也加上購物車按鈕 ✨ */}
+                      <button 
+                        className="btn btn-add-cart w-100 mt-2"
+                        onClick={() => addToCart(product)}
+                      >
+                        加入購物車
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -139,7 +144,11 @@ export default function FoodBeverage() {
                           </span>
                         </div>
                       </div>
-                      <button className="btn btn-add-cart w-100 mt-3 d-none d-md-block">
+                      {/* ✨ 修正：正確綁定 onClick 事件 ✨ */}
+                      <button 
+                        className="btn btn-add-cart w-100 mt-3 d-none d-md-block"
+                        onClick={() => addToCart(product)}
+                      >
                         加入購物車
                       </button>
                     </div>
@@ -150,27 +159,7 @@ export default function FoodBeverage() {
           </div>
         </div>
 
-        {/* 分頁 Pagination */}
-        <nav aria-label="Page navigation" className="mb-5 pb-5">
-          <ul className="pagination justify-content-center custom-pagination">
-            <li className="page-item disabled">
-              <a className="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&lt;</span>
-              </a>
-            </li>
-            <li className="page-item active"><a className="page-link" href="#">1</a></li>
-            <li className="page-item"><a className="page-link" href="#">2</a></li>
-            <li className="page-item"><a className="page-link" href="#">3</a></li>
-            <li className="page-item disabled"><a className="page-link" href="#">...</a></li>
-            <li className="page-item"><a className="page-link" href="#">15</a></li>
-            <li className="page-item">
-              <a className="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&gt;</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-
+        {/* 分頁  */}
       </div>
     </div>
   );
