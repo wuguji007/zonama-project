@@ -237,7 +237,14 @@ const CartPage = ({ products, setProducts, totals, selectedCoupon, onSelect }) =
     // navigate('/checkout', { state: { orderData } });
     setTimeout(() => navigate('/checkout', { state: { orderData, selectedItem: orderData.items } }), 1500);
   };
-  
+
+const [merchantOrderNo] = useState(`ZNM${Date.now()}`);
+  const [formData, setFormData] = useState({
+    receiverName: '',
+    phone: '',
+    email: '',
+    address: '',
+  });
 
   return (
     <div>

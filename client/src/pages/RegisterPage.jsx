@@ -63,7 +63,8 @@ export default function Register({setVerificationEmail}) {
             console.log('註冊成功！驗證碼已發送至您的信箱', res.data);
             
             // 導向驗證頁面，並透過 state 傳遞 email
-            setTimeout(() => navigate('/verify', { state: { email: formData.email } }), 1500);
+            // setTimeout(() => navigate('/verify', { state: { email: formData.email } }), 1500);
+            setTimeout(() => navigate('/login'), 1500);
 
         } catch (error) {
             console.log(error.response?.data?.message || '註冊失敗');
