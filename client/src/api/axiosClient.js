@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-
 const API_BASE_URL = import.meta.env.VITE_API_URL;
-
 
 //建立 Axios 實例 (Instance)
 const axiosClient = axios.create({

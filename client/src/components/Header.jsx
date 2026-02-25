@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { Search, ShoppingCart, CircleX, CircleUser } from "lucide-react"
 
 
-export default function NavBar({ isLoggedIn, onLogout }) {
+export default function NavBar({ isLoggedIn, onLogout, cartCount }) {
   const navigate = useNavigate();
 
   const handleLogoutClick = () => {
@@ -140,7 +140,7 @@ export default function NavBar({ isLoggedIn, onLogout }) {
     );
   };
 
-  //User會員選單
+  // User會員選單
   const UserMenu = () => {
     return (
       <>
@@ -215,14 +215,24 @@ export default function NavBar({ isLoggedIn, onLogout }) {
                 {/* 購物車 */}
                 <div className="nav-cart">
                   <button className="btn p-0">
-                      {/* 手機版 */}
-                      <Link className="nav-link nav-link-cart p-2 rounded-circletext-primary d-block d-md-none" to="/cart">
-                          <ShoppingCart size={24} />
-                      </Link>
-                      {/* 平板電腦 */}
-                      <Link className="nav-link nav-link-cart p-2 rounded-circle text-primary d-none d-md-block" to="/cart">
-                          <ShoppingCart size={36} />
-                      </Link>                                        
+                    {/* 手機版 */}
+                    <Link className="position-relative nav-link nav-link-cart p-2 rounded-circletext-primary d-block d-md-none" to="/cart">
+                        <ShoppingCart size={24} />
+                        {cartCount > 0 && (
+                          <span className="position-absolute start-70 translate-middle badge rounded-circle bg-danger border border-danger fw-bold" style={{ top: '15px', fontSize: '0.6rem', padding: '0.4em 0.4em' }}>
+                            {cartCount > 99 ? '99+' : cartCount}
+                          </span>
+                        )}
+                    </Link>
+                    {/* 平板電腦 */}
+                    <Link className="position-relative nav-link nav-link-cart p-2 rounded-circle text-primary d-none d-md-block" to="/cart">
+                      <ShoppingCart size={36} />
+                      {cartCount > 0 && (
+                        <span className="position-absolute start-70 translate-middle badge rounded-circle bg-danger border border-danger fw-bold" style={{ top: '15px', fontSize: '0.6rem', padding: '0.4em 0.4em', width: '1.2rem', height:'1.2rem' }}>
+                          {cartCount > 99 ? '99+' : cartCount}
+                        </span>
+                      )}
+                    </Link>                                        
                   </button>
                 </div>
 
