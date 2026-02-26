@@ -4,7 +4,7 @@ import HeroSwiper from "../components/HeroSwiper.jsx";
 import BackToTop from '../components/BackToTop.jsx';
 import { getImageUrl } from "../utils/imageHelper.js";
 import { ChevronLeft, ChevronRight, ShoppingCart, Cat, CookingPot } from 'lucide-react';
-// ✨ 引入購物車 Context ✨
+// 引入購物車 Context
 import { useCart } from '../context/CartContext.jsx';
 
 // Import Swiper React components
@@ -162,8 +162,8 @@ export default function Home({ handleAddToCart }) {
     const [productData, setProductData] = useState([]);
     const [showMenu, setShowMenu] = useState(false);
 
-    // ✨ 取得加入購物車的方法 ✨
-    const { addToCart } = useCart();
+    // 取得加入購物車的方法
+    // const { addToCart } = useCart();
     const GCS_JSON_URL = "https://storage.googleapis.com/zonama-project-assets/products.json";
     
     const fetchData = async () => {
@@ -234,13 +234,22 @@ export default function Home({ handleAddToCart }) {
                             {flashSaleProducts.map((p) => (
                                 <SwiperSlide key={p.id} className="swiper-slide">
                                     <div className="card product-card d-flex flex-column justify-content-between h-auto rounded-4 p-3 p-md-5">
-                                        <img src={p.image} className="card-img-top mb-0 mb-md-4" alt={p.title} />
+                                        <Link to={`/product/${p.id}`}>
+                                            <img src={p.image} className="card-img-top mb-0 mb-md-4" alt={p.title} />
+                                        </Link>
                                         <div className="d-flex flex-column justify-content-between h-100">
                                             <div className="card-body p-0 mb-4">
-                                                <h5 className="card-title fw-bold text-primary-950">{p.title}</h5>                                    
+                                                <Link to={`/product/${p.id}`}>
+                                                    <h5 className="card-title fw-bold text-primary-950">{p.title}</h5>                                    
+                                                </Link>
                                             </div>
                                             <div className="product-card-footer">
-                                                <p className="card-text text-primary-950">NT${p.price} <del className="text-gray-300 fs-6 fw-normal">NT${p.origin_price}</del></p>
+                                                <Link to={`/product/${p.id}`}>
+                                                    <p className="card-text text-primary-950 mb-2">
+                                                        NT${p.price}
+                                                        <del className="text-gray-300 fs-6 fw-normal">NT${p.origin_price}</del>
+                                                    </p>
+                                                </Link>
                                                 <button
                                                     type='button'
                                                     className="btn btn-primary fw-bold py-4 rounded-pill w-100"
@@ -279,14 +288,23 @@ export default function Home({ handleAddToCart }) {
                         >
                             {items.map((p) => (
                                 <SwiperSlide key={p.id} className="swiper-slide">
-                                    <div className="card bg-gray-50 d-flex flex-column justify-content-between h-100 rounded-4 border-0 p-3 p-md-5">
-                                        <img src={p.image} className="card-img-top mb-0 mb-md-4" alt={p.title} />
+                                    <div className="product-card-gray  d-flex flex-column justify-content-between h-100 rounded-4 border-0 p-3 p-md-5">
+                                        <Link to={`/product/${p.id}`}>
+                                            <img src={p.image} className="card-img-top mb-0 mb-md-4" alt={p.title} />
+                                        </Link>
                                         <div className="d-flex flex-column justify-content-between h-100">
                                             <div className="card-body p-0">
-                                                <h5 className="card-title fw-bold text-primary-950">{p.title}</h5>
+                                                <Link to={`/product/${p.id}`}>
+                                                    <h5 className="card-title fw-bold text-primary-950">{p.title}</h5>
+                                                </Link>
                                             </div>
                                             <div className="product-card-footer">
-                                                <p className="card-text text-primary-950">NT${p.price} <del className="text-gray-300 fs-5 fw-normal">NT${p.origin_price}</del></p>
+                                                <Link to={`/product/${p.id}`}>
+                                                    <p className="card-text text-primary-950 mb-2">
+                                                        NT${p.price}
+                                                        <del className="text-gray-300 fs-6 fw-normal">NT${p.origin_price}</del>
+                                                    </p>
+                                                </Link>
                                                 <button
                                                     type='button'
                                                     className="card-btn btn btn-primary fw-bold py-3 py-md-4 rounded-pill w-100"
@@ -447,22 +465,27 @@ export default function Home({ handleAddToCart }) {
                                                         <div className="row g-0">
                                                             <div className="col-6">
                                                                 <div className="card-img-wrapper">
-                                                                    <img 
+                                                                    <Link to={`/product/${p.id}`}>
+                                                                        <img 
                                                                     src={p.image}
-                                                                    className="card-img-top" 
                                                                     alt={p.title} 
                                                                     />
+                                                                    </Link>
                                                                 </div>
                                                             </div>
                                                                     
                                                             <div className="col-6 d-flex flex-column">
-                                                                <div className="card-body d-flex flex-column p-3">                              
-                                                                    <h6 className="card-title fw-bold fs-5 fs-md-4 mb-1">{p.title}</h6 >
+                                                                <div className="card-body d-flex flex-column p-3">
+                                                                    <Link to={`/product/${p.id}`}>
+                                                                        <h6 className="card-title fw-bold fs-5 text-primary-900 fs-md-4 mb-1">{p.title}</h6 >
+                                                                    </Link>
                                                                     
                                                                     <div className="d-flex justify-content-between align-items-start align-items-md-start flex-column align-items-start mt-auto pt-2 border-top">
-                                                                        <div className="d-flex flex-column align-items-start align-items-md-start">
-                                                                            <span className="text-primary-950 fw-bold fs-4">NT${p.price}</span>
-                                                                            <del className='text-gray-300 fs-6 fs-md-5 mb-2'>${p.origin_price}</del>
+                                                                        <div className="d-flex flex-column align-items-start align-items-md-start py-2">
+                                                                            <Link to={`/product/${p.id}`}>
+                                                                                <span className="text-primary-900 fw-bold fs-5">NT${p.price}</span>
+                                                                                <del className='text-gray-300 fs-6 fs-md-5 mb-2'>${p.origin_price}</del>
+                                                                            </Link>
                                                                         </div>
                                                                         <button
                                                                             type='button'
@@ -677,7 +700,7 @@ export default function Home({ handleAddToCart }) {
                         <div className="row bg-primar-50 d-flex flex-column flex-md-row">
                             {/* 左側商品宣傳圖 */}
                             <div className="col-12 col-md-4 border-4 px-md-0 mb-3 mb-md-0">
-                                <img src={`${import.meta.env.BASE_URL}images/promo-pet.svg`} alt="pet-supplies" className='promo-img h-100'/>
+                                <img src={`${import.meta.env.BASE_URL}images/promo-pet.svg`} alt="pet-supplies" className='promo-img'/>
                             </div>
                             {/* <div className="col-12 col-md-4 px-md-0">
                                 <div className="border-4 mb-3 mb-md-0">

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Trash2, Plus, Minus, Tag, AlertCircle, ChevronRight,ChevronLeft, Shield, Info, Loader2 } from 'lucide-react';
 // import { getCart, updateQuantity, removeCartItem, addToCart, clearInvalidItems, toggleItemSelection } from '../api/cartApi';
@@ -213,16 +213,40 @@ const CartPage = ({ products, setProducts, totals, selectedCoupon, onSelect }) =
   // const total = subtotal + shippingFee - discount;
   // const freeShippingThreshold = 2000;
   // const diffForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
-  const selectedItems = products.filter(item => item.checked);
   // const selectedItems = cartItems.filter(item => item.selected);
-  const subtotal = selectedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   // const shippingFee = 120;
-  const shippingFee = subtotal >= 1000 || subtotal === 0 ? 0 : 120;
-  const discount = 0;
-  const total = subtotal + shippingFee - discount;
   // const freeShippingThreshold = 2000;
-  const freeShippingThreshold = 1000;
-  const diffForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
+
+  // 使用useMemo，避免每次渲染時重複執行filter和reduce等運算
+  const cartStats = useMemo(() => {
+    const freeShippingThreshold = 1000;
+    const discount = 0;
+    const selectedItems = products.filter(item => item.checked);
+    const subtotal = selectedItems.reduce(
+      (sum, item) => sum + item.price * item.quantity, 0);
+    const shippingFee = subtotal >= freeShippingThreshold || subtotal === 0 ? 0 : 120;
+    const total = subtotal + shippingFee - discount;
+    const diffForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
+    return {
+      selectedItems,
+      subtotal,
+      shippingFee,
+      discount,
+      total,
+      freeShippingThreshold,
+      diffForFreeShipping
+    };
+  }, [products]);
+
+  // 解構出來使用
+  const { 
+    selectedItems,
+    discount,
+    subtotal, 
+    shippingFee, 
+    total, 
+    diffForFreeShipping 
+  } = cartStats;
 
   // [Logic] 結帳
   const handleCheckout = () => {
@@ -361,7 +385,7 @@ const [merchantOrderNo] = useState(`ZNM${Date.now()}`);
                       </div>
                       
                       <div className="item-actions d-flex align-items-md-center flex-shrink-0">
-                        <button className="delete-btn" onClick={() => handleRemoveItem(item.id)}><Trash2 size={18} /></button>                        
+                        <button className="delete-btn mt-2" onClick={() => handleRemoveItem(item.id)}><Trash2 size={18} /></button>                        
                       </div>
                       {/* {cartItems.length === 0 ? (
                         <div style={{padding: '40px', textAlign: 'center', color: '#999'}}>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
@@ -13,6 +13,7 @@ import CartPage from './pages/CartPage.jsx';
 import CheckoutPage from './pages/CheckoutPage.jsx';
 import PaymentCompletePage from './pages/PaymentCompletePage.jsx';
 import FoodBeverage from './pages/FoodBeverage.jsx';
+import ProductDetailPage from './pages/ProductDetailPage.jsx';
 
 
 function App() {
@@ -37,17 +38,40 @@ function App() {
   };  
 
   /* 購物車/結帳相關狀態管理 */
-  const [products, setProducts] = useState([]);
-  const [selectedCoupon, setSelectedCoupon] = useState(null);
+  // const [products, setProducts] = useState([]); // 購物車商品
+  // const [selectedCoupon, setSelectedCoupon] = useState(null);
+
+  const STORAGE_KEY = 'zonama-cart';
+
+  /* 購物車/結帳相關狀態管理 */
+  // 使用「延遲初始化」：在 useState 中傳入函式，只在組件首次掛載時執行一次
+  const [products, setProducts] = useState(() => {
+    try {
+      const savedProducts = localStorage.getItem(STORAGE_KEY);
+      // 若有資料則解析 JSON，否則回傳空陣列
+      return savedProducts ? JSON.parse(savedProducts) : [];
+    } catch (error) {
+      console.error("無法從 localStorage 讀取購物車資料:", error);
+      return [];
+    }
+  });
+
+  // 當 products 狀態改變時，自動更新 localStorage
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+  }, [products]);
+
 
   const handleAddToCart = (product) => {
     setProducts(prev => {
       // 檢查購物車是否已有此商品
       const isExists = prev.find(item => item.id === product.id);
+      const addQuantity = product.quantity || 1;
+
       // 商品已存在? 在原有商品上增加數量：否則新增一個newProduct
       if (isExists) {
         return prev.map(item =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === product.id ? { ...item, quantity: item.quantity + addQuantity } : item
         );
       }
 
@@ -60,13 +84,17 @@ function App() {
         price: Number(product.price),
         originalPrice: Number(product.origin_price),
         unit: product.unit,
-        quantity: 1,
+        quantity: addQuantity,
         checked: true
       };
 
       return [...prev, newProduct];
     });
   };
+
+
+  // 優惠券狀態
+  const [selectedCoupon, setSelectedCoupon] = useState(null);
 
   // 結帳明細和商品數量計算
   const totals = useMemo(() => {
@@ -162,6 +190,11 @@ function App() {
                   onReset={handleReset}
                 />
               }
+            />
+            
+            <Route
+              path="/product/:id"
+              element={<ProductDetailPage handleAddToCart={handleAddToCart} />}
             />
 
             <Route

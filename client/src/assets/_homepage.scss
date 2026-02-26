@@ -263,16 +263,12 @@
     } 
 }
 
-.product-card-gray {
-    background-color: $gray-50;
-    transition: 0.3s ease-in;
-    &:hover {
-        background-color: $blue-50;
-    }
-}
 
 .card-img-top {
     transition: transform 0.3s ease-in-out;
+    &:hover{
+        transform: scale(1.15);
+    }
 }
 
 .card:hover .card-img-top {

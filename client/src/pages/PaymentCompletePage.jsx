@@ -16,15 +16,28 @@ export default function PaymentCompletePage({ formData, merchantOrderNo, onReset
 
     return (
         <>
-            <header className="simple-header pt-0 shadow-sm">
-                <div className="container d-flex justify-content-between align-items-center">
-                    <div className="logo small">
-                        ZONAMA <span>購物車</span>
+            <header className="simple-header shadow-sm bg-white">
+                <div className="container header-inner">
+                    <div className="logo-section">
+                        <img src="/zonama-logo-sm.svg" alt="Z" className="mobile-logo" />
+                        <span className="brand-name">ZONAMA</span>
+                        <span className="cart-title">購物車</span>
                     </div>
-                    <div style={{color: '#ccc', fontSize: '14px', display:'flex', gap:'15px'}}>
-                        <div style={{ color: 'var(--primary-blue)', fontWeight: 'bold' }}><span className='me-1'><CircleCheckBig size={18} /></span>訂單明細確認</div>
-                        <div style={{ color: 'var(--primary-blue)', fontWeight: 'bold' }}><span className='me-1'><CircleCheckBig size={18} /></span>訂購/付款</div>
-                        <div style={{ color: 'var(--primary-blue)', fontWeight: 'bold' }}>3. 訂購完成</div>
+                    <div className="stepper-container">
+                        <div className="step active">
+                            <span className="step-badge">1</span>
+                            <span className="step-text">訂單明細確認</span>
+                        </div>
+                        <div className="step-dash">—</div>
+                        <div className="step active">
+                            <span className="step-badge">2</span>
+                            <span className="step-text">訂購/付款</span>
+                        </div>
+                        <div className="step-dash">—</div>
+                        <div className="step active">
+                            <span className="step-badge">3</span>
+                            <span className="step-text">訂購完成</span>
+                        </div>
                     </div>
                 </div>
             </header>

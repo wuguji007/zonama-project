@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CircleCheckBig, ArrowLeft, CreditCard, Loader2 } from 'lucide-react';
-import { useCart } from '../context/CartContext'; // ✨ 引入 useCart
+import { useCart } from '../context/CartContext'; // 引入 useCart
 
 export default function CheckoutPage({ formData, setFormData, merchantOrderNo }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const { clearCart } = useCart(); // ✨ 取得清空購物車方法
+    const { clearCart } = useCart(); // 取得清空購物車方法
     
-    // ✨ 防呆保護：如果沒有資料，給予預設值避免崩潰
+    // 防呆保護：如果沒有資料，給予預設值避免崩潰
     const getOrderData = location.state?.orderData || { subtotal: 0, shippingFee: 0, total: 0 };
     
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,7 +19,7 @@ export default function CheckoutPage({ formData, setFormData, merchantOrderNo })
         try {
             setTimeout(() => {
                 setIsSubmitting(false);
-                clearCart(); // ✨ 結帳成功，清空購物車
+                clearCart(); // 結帳成功，清空購物車
                 navigate('/payment-complete', { state: { getOrderData } });
             }, 1500);
         } catch (err) {
@@ -29,18 +29,28 @@ export default function CheckoutPage({ formData, setFormData, merchantOrderNo })
 
     return (
         <>
-            <header className="simple-header pt-0 shadow-sm">
-                {/* Header 保持不變 */}
-                <div className="container d-flex justify-content-between align-items-center">
-                    <div className="logo small">
-                        ZONAMA <span>購物車</span>
+            <header className="simple-header shadow-sm bg-white">
+                <div className="container header-inner">
+                    <div className="logo-section">
+                        <img src="/zonama-logo-sm.svg" alt="Z" className="mobile-logo" />
+                        <span className="brand-name">ZONAMA</span>
+                        <span className="cart-title">購物車</span>
                     </div>
-                    <div style={{color: '#ccc', fontSize: '14px', display:'flex', gap:'15px'}}>
-                        <div style={{ color: 'var(--primary-blue)', fontWeight: 'bold' }}>
-                            <span className='me-1'><CircleCheckBig size={18} /></span>訂單明細確認
+                    <div className="stepper-container">
+                        <div className="step active">
+                            <span className="step-badge">1</span>
+                            <span className="step-text">訂單明細確認</span>
                         </div>
-                        <div style={{color: 'var(--primary-blue)', fontWeight:'bold'}}>2. 訂購/付款</div>
-                        <div>3. 訂購完成</div>
+                        <div className="step-dash">—</div>
+                        <div className="step active">
+                            <span className="step-badge">2</span>
+                            <span className="step-text">訂購/付款</span>
+                        </div>
+                        <div className="step-dash">—</div>
+                        <div className="step">
+                            <span className="step-badge">3</span>
+                            <span className="step-text">訂購完成</span>
+                        </div>
                     </div>
                 </div>
             </header>

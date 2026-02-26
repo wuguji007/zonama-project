@@ -216,13 +216,16 @@ export default function NavBar({ isLoggedIn, onLogout, cartCount }) {
                 <div className="nav-cart">
                   <button className="btn p-0">
                     {/* 手機版 */}
-                    <Link className="position-relative nav-link nav-link-cart p-2 rounded-circletext-primary d-block d-md-none" to="/cart">
+                    <Link className="position-relative nav-link nav-link-cart p-2 mx-2rounded-circletext-primary d-block d-md-none" to="/cart">
                         <ShoppingCart size={24} />
                         {cartCount > 0 && (
-                          <span className="position-absolute start-70 translate-middle badge rounded-circle bg-danger border border-danger fw-bold" style={{ top: '15px', fontSize: '0.6rem', padding: '0.4em 0.4em' }}>
-                            {cartCount > 99 ? '99+' : cartCount}
-                          </span>
-                        )}
+                        <span
+                          className="position-absolute start-70 translate-middle badge rounded-circle bg-danger border border-danger text-center fw-bold"
+                          style={{ top: '15px', fontSize: '0.6rem', padding: '0.3em 0.3em' }}
+                        >                           
+                          {cartCount > 99 ? '99+' : cartCount}                         
+                        </span>                        
+                      )}
                     </Link>
                     {/* 平板電腦 */}
                     <Link className="position-relative nav-link nav-link-cart p-2 rounded-circle text-primary d-none d-md-block" to="/cart">

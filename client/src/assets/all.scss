@@ -135,3 +135,15 @@ h1 {
   color: $gray-300;
   opacity: 1;
 }
+
+.product-card-gray {
+    background-color: $gray-50;
+    transition: 0.3s ease-in;
+    &:hover {
+        background-color: $blue-50;
+    }
+}
+
+.table-light.gray50 {
+  background-color: $gray-50;
+}
