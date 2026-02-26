@@ -1,6 +1,7 @@
 const jsonServer = require('json-server');
 const auth = require('json-server-auth');
 const cors = require('cors');
+const crypto = require("crypto");
 
 const app = jsonServer.create();
 const router = jsonServer.router('db.json');
@@ -33,6 +34,16 @@ const rules = auth.rewriter({
 // 啟用登入驗證 Middleware
 app.use(rules);
 app.use(auth);
+
+
+
+
+
+
+
+
+
+
 app.use(router);
 
 const PORT = process.env.PORT || 3000;

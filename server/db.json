@@ -66,5 +66,40 @@
       "createdAt": "2026-02-25T10:30:00.000Z",
       "updatedAt": "2026-02-25T10:30:00.000Z"
     }
+  ],
+
+  "orders": [
+    {
+      "id": "c8c3b4f0-7c12-4e9b-a0d1-88c92bdf7d12",
+      "orderNo": "ZON-20260226-0001",
+      "merchantOrderNo": "NEWEBPAY1234567890",
+      "userId": 3,
+      "amount": 1268,
+      "status": "PAID",
+      "createdAt": "2026-02-26T10:00:00.000Z",
+      "paidAt": "2026-02-26T10:01:00.000Z"
+    }
+  ],
+
+  "orderItems": [
+    {
+      "id": "oi-10001",
+      "orderId": "c8c3b4f0-7c12-4e9b-a0d1-88c92bdf7d12",
+      "productId": 101,
+      "name": "麻辣燙湯底方塊2包-獨家配方",
+      "price": 899,
+      "quantity": 1,
+      "subtotal": 899
+    },
+    {
+      "id": "oi-10002",
+      "orderId": "c8c3b4f0-7c12-4e9b-a0d1-88c92bdf7d12",
+      "productId": 102,
+      "name": "寵愛營養配方貓飼料2包-獨家配方",
+      "price": 369,
+      "quantity": 1,
+      "subtotal": 369
+    }
   ]
 }
+
