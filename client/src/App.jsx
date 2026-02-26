@@ -147,7 +147,7 @@ function App() {
 
         <div className="App-container flex-grow-1">
           <Routes>
-            <Route path="/" element={<HomePage handleAddToCart={handleAddToCart} />} />
+            <Route path="/" element={<HomePage handleAddToCart={handleAddToCart} user={user} />} />
             <Route path="/login" element={<LoginPage setToken={setToken} setUser={setUser} />} />
             <Route path='/register' element={<RegisterPage setVerificationEmail={setVerificationEmail} />} />
             <Route path='/verify' element={<VerifyPage />} />

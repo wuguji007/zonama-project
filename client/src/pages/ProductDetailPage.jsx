@@ -185,7 +185,7 @@ const ProductDetailPage = ({ handleAddToCart }) => {
             <div className="bg-white p-4 rounded-4 border border-gray-100 mb-4">
               <div className="d-flex align-items-center mb-4">
                 <span className="fw-bold me-4 text-secondary">選擇數量</span>
-                <div className="input-group" style={{ width: '130px' }}>
+                <div className="input-group me-4" style={{ width: '130px' }}>
                   <button onClick={decrementQty} className="btn btn-outline-secondary border-secondary-subtle rounded-start-pill">
                     <Minus size={16} />
                   </button>
@@ -194,6 +194,7 @@ const ProductDetailPage = ({ handleAddToCart }) => {
                     <Plus size={16} />
                   </button>
                 </div>
+                <span className='small text-secondary fs-6'>規格：{product.unit}</span>
               </div>
 
               <div className="row g-2">
@@ -335,13 +336,13 @@ const ProductDetailPage = ({ handleAddToCart }) => {
                   <Link to={`/product/${p.id}`} className="d-block mb-3 bg-white rounded-3 p-3 overflow-hidden text-center" style={{ aspectRatio: '1/1' }}>
                     <img src={p.image} alt={p.title} className="img-fluid h-100 object-fit-contain zoom-hover" />
                   </Link>
-                  <Link to={`/product/${p.id}`} className="text-decoration-none mb-2">
+                  <Link to={`/product/${p.id}`} className="text-decoration-none px-2">
                     <h4 className="h4 fw-bold text-primary-900 text-truncate-2 mb-2" style={{ height: '3em' }}>
                       {p.title}
                     </h4>
                   </Link>
-                  <div className="mt-auto d-flex align-items-center justify-content-between">
-                    <span className="h5 fw-bold text-primary mb-0">NT${p.price}</span>
+                  <div className="mt-auto d-flex align-items-center justify-content-between px-2">
+                    <span className="h4 fw-bold text-primary mb-0">NT${p.price}</span>
                     <button 
                       onClick={() => handleAddToCart(p)}
                       className="btn btn-primary text-white rounded-4 p-3 border"

@@ -77,11 +77,15 @@ const mockAxiosClient = {
 
 
 export default function MemberCenter({ user }) {
-    const locaiton = useLocation();
+    const location = useLocation();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const isUser = locaiton.state?.user || user;
+
+    //登入後取得user資訊
+    // const isUser = location.state?.user || user;
+    // const userName = location.state?.user.username || user.username;
+    // const userEmail = location.state?.email || user.email;
 
     // 詳情視窗狀態
     const [selectedOrder, setSelectedOrder] = useState(null);
@@ -89,6 +93,19 @@ export default function MemberCenter({ user }) {
     const [detailLoading, setDetailLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
+    // useEffect(() => {
+    //     if (userName) {
+    //         console.log(`從登入頁收到Username: ${userName}`);
+    //     } else {
+    //         console.log('未收到註冊帳號的Username');
+    //     }
+
+    //     if (userEmail) {
+    //         console.log(`從註冊頁收到email: ${userName}`);
+    //     } else {
+    //         console.log('未收到註冊帳號的Email');
+    //     }
+    // }, [userName, userEmail]);
 
     const userData = {
         username: "Wuguji",
@@ -163,8 +180,6 @@ export default function MemberCenter({ user }) {
             );
         }
     };
-
-    
 
     return (
         <>

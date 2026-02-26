@@ -480,7 +480,7 @@ export default function Home({ handleAddToCart }) {
                                                                         <h6 className="card-title fw-bold fs-5 text-primary-900 fs-md-4 mb-1">{p.title}</h6 >
                                                                     </Link>
                                                                     
-                                                                    <div className="d-flex justify-content-between align-items-start align-items-md-start flex-column align-items-start mt-auto pt-2 border-top">
+                                                                    <div className="d-flex justify-content-between align-items-start align-items-md-start flex-column align-items-start mt-auto pt-2 border-top border-gray-100">
                                                                         <div className="d-flex flex-column align-items-start align-items-md-start py-2">
                                                                             <Link to={`/product/${p.id}`}>
                                                                                 <span className="text-primary-900 fw-bold fs-5">NT${p.price}</span>
@@ -584,7 +584,7 @@ export default function Home({ handleAddToCart }) {
                             >
                                 <div className="p-3">
                                     {categories.map((cat) => (
-                                        <div key={cat.id} className='border-bottom border-primary'>
+                                        <div key={cat.id} className='border-bottom border-primary-500'>
                                             <button 
                                                 className="btn btn-link text-decoration-none w-100 text-start text-primary fw-bold d-flex justify-content-between align-items-center py-3 px-0 sidebar-hover"
                                             >

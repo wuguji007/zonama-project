@@ -20,20 +20,22 @@
 body {
   font-family: "Noto Sans TC", sans-serif;
   line-height: 1.2;
-  letter-spacing: 2px;
-  margin: 0; /* 加上這行確保沒有多餘邊距 */
+  letter-spacing: 0.05em;
+  margin: 0; /* 確保沒有多餘邊距 */
   padding: 0;
+  overflow-x: hidden; /* 防止行動裝置出現水平捲軸 */
+  -webkit-font-smoothing: antialiased;
 }
-
-
 
 a {
   text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 img {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
 
@@ -56,30 +58,28 @@ h1 {
   font-size: 20px;
 }
 
-
-
 .container {
-  width: 1296px;
+  max-width: 1296px;
   margin: 0 auto;
 }
 
 @media (max-width: 768px) {
   .container {
-    width: 768px;
+    max-width: 768px;
     margin: 0 auto;
   }
 }
 
 @media (max-width: 568px) {
   .container {
-    width: 568px;
+    max-width: 568px;
     margin: 0 auto;
   }
 }
 
 @media (max-width: 378px) {
   .container {
-    width: 375px;
+    max-width: 375px;
     margin: 0 auto;
   }
 }

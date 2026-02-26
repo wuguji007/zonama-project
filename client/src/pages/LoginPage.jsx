@@ -23,23 +23,21 @@ export default function Login({ setToken, setUser }) {
         setFormData({
             ...formData,
             [name]: value
-        });
-        
-
+        });        
     }
 
-    const handleEmailBlur = async () => {
-        try {
-            const res = await axiosClient.post('/check-email', { email: formData.email });
-            if (!res.data.exists) {
-                setEmailCheck({ error: true, message: '此帳號尚未註冊' });
-            } else {
-                setEmailCheck({ error: false, message: '' });
-            }
-        } catch (error) {
-            console.error('檢查失敗', error);
-        }
-    }
+    // const handleEmailBlur = async () => {
+    //     try {
+    //         const res = await axiosClient.post('/check-email', { email: formData.email });
+    //         if (!res.data.exists) {
+    //             setEmailCheck({ error: true, message: '此帳號尚未註冊' });
+    //         } else {
+    //             setEmailCheck({ error: false, message: '' });
+    //         }
+    //     } catch (error) {
+    //         console.error('檢查失敗', error);
+    //     }
+    // }
 
 
     const handleSubmit = async (e) => {
@@ -57,6 +55,8 @@ export default function Login({ setToken, setUser }) {
             console.log('帳號錯誤');
             return;
         }       
+
+        setIsLoading(true);
 
         try {
             const res = await axiosClient.post('/login', {email: formData.email, password: formData.password});
@@ -77,12 +77,14 @@ export default function Login({ setToken, setUser }) {
 
             console.log('登入成功!');
             setTimeout(() => {
-                navigate('/')
+                navigate('/', { state: { username: user.username, email: user.email } })
             }, 1500);
 
         } catch (error) {
             console.error('登入失敗，請檢查帳號密碼');
             setSubmitErr(error.response?.sata?.message || '登入失敗，請檢查帳號密碼');
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -122,7 +124,7 @@ export default function Login({ setToken, setUser }) {
                                                     name="email"
                                                     value={formData.email}
                                                     onChange={handleInputChange}
-                                                    onBlur={handleEmailBlur}
+                                                    // onBlur={handleEmailBlur}
                                                     className="form-control border-start-0 ps-2 py-3"
                                                     placeholder="your@email.com"
                                                     required
