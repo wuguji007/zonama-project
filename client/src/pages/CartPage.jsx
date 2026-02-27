@@ -4,7 +4,7 @@ import { ShoppingCart, Trash2, Plus, Minus, Tag, AlertCircle, ChevronRight,Chevr
 // import { getCart, updateQuantity, removeCartItem, addToCart, clearInvalidItems, toggleItemSelection } from '../api/cartApi';
 // import { useCart } from '../context/CartContext';
 
-const CartPage = ({ products, setProducts, totals, selectedCoupon, onSelect }) => {
+const CartPage = ({ products, setProducts, checkLoggedIn, totals, selectedCoupon, onSelect }) => {
   const navigate = useNavigate();
   const allChecked = products.length > 0 && products.every(p => p.checked);
 
@@ -257,18 +257,32 @@ const CartPage = ({ products, setProducts, totals, selectedCoupon, onSelect }) =
       alert('請選擇要結帳的商品');
       return;
     }
-    const orderData = { items: selectedItems, subtotal, shippingFee, total };
-    // navigate('/checkout', { state: { orderData } });
-    setTimeout(() => navigate('/checkout', { state: { orderData, selectedItem: orderData.items } }), 1500);
+
+    if (!checkLoggedIn) {
+      alert('請先登入帳號');
+      setTimeout(() => navigate('/login'), 1000);
+      return;
+    }
+
+    try {
+      const CreatedAt = new Date();
+      const orderData = {
+        items: selectedItems,
+        subtotal,
+        shippingFee,
+        total,
+        CreatedAt: CreatedAt.toISOString()
+      };
+
+      console.log('訂單已成立');
+      // navigate('/checkout', { state: { orderData } });
+      setTimeout(() => navigate('/checkout', { state: { orderData, selectedItem: orderData.items } }), 1500);
+      
+    } catch (error) {
+      console.log('訂單建立失敗');
+    }
   };
 
-const [merchantOrderNo] = useState(`ZNM${Date.now()}`);
-  const [formData, setFormData] = useState({
-    receiverName: '',
-    phone: '',
-    email: '',
-    address: '',
-  });
 
   return (
     <div>

@@ -2,15 +2,15 @@ import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CircleCheckBig, CheckCircle } from 'lucide-react';
 
-export default function PaymentCompletePage({ formData, merchantOrderNo, onReset }) {
+export default function PaymentCompletePage({ merchantOrderNo, onReset }) {
     const navigate = useNavigate();
     const location = useLocation();
     
-    // ✨ 防呆：沒有資料時預設 total 為 0
-    const orderFinal = location.state?.getOrderData || { total: 0 };
+    const orderFinal = location.state?.orderFinal || { total: 0 };
+    const purchaseInfo = location.state?.purchaseInfo || {};
   
     const handleGoHome = () => {
-        onReset();
+        // onReset();
         navigate('/');
     };
 
@@ -61,11 +61,10 @@ export default function PaymentCompletePage({ formData, merchantOrderNo, onReset
                                     </div>
                                     <div className="d-flex justify-content-between small mb-3 text-muted">
                                         <span>收件姓名</span>
-                                        <span className="font-weight-bold text-dark">{formData.receiverName || '尚未填寫'}</span>
+                                        <span className="font-weight-bold text-dark">{purchaseInfo.receiverName || '測試帳號'}</span>
                                     </div>
                                     <div className="d-flex justify-content-between small mb-3 text-muted">
                                         <span>支付總額</span>
-                                        {/* ✨ 安全讀取 */}
                                         <span className="text-primary font-weight-bold h6 mb-0">NT${orderFinal.total?.toLocaleString()}</span>
                                     </div>
                                 

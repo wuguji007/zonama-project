@@ -19,8 +19,11 @@ import ProductDetailPage from './pages/ProductDetailPage.jsx';
 function App() {
   
   const [verificationEmail, setVerificationEmail] = useState('');
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
   const [token, setToken] = useState(localStorage.getItem('token'));
+
+  // 管理訂單狀態
+  const [orderData, setOrderData] = useState(localStorage.getItem('order'));
 
   //登出功能
   const handleLogout = () => {
@@ -120,7 +123,7 @@ function App() {
   }, [products, selectedCoupon]);
 
   // 結帳表單相關
-  const [merchantOrderNo] = useState(`ZNM${Date.now()}`);
+  const [merchantOrderNo] = useState(`${Date.now()}`);
   const [formData, setFormData] = useState({
     receiverName: '',
     phone: '',
@@ -164,6 +167,7 @@ function App() {
                   totals={totals}                  
                   selectedCoupon={selectedCoupon}                 
                   onSelect={setSelectedCoupon}
+                  checkLoggedIn={!!token}
                 />
               }
             />
@@ -176,6 +180,8 @@ function App() {
                   setFormData={setFormData}
                   merchantOrderNo={merchantOrderNo}
                   totals={totals}
+                  setOrderData={setOrderData}
+                  onReset={handleReset}
                 />
               }
             />
@@ -200,7 +206,11 @@ function App() {
             <Route
               path='/member-center'
               element={
-                <MemberCenter user={user} />
+                <MemberCenter
+                  user={user}
+                  orderData={orderData}
+                  merchantOrderNo={merchantOrderNo}
+                />
                 // <ProtectedRoute>
                 
                 // </ProtectedRoute>

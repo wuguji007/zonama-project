@@ -61,21 +61,23 @@ export default function Login({ setToken, setUser }) {
         try {
             const res = await axiosClient.post('/login', {email: formData.email, password: formData.password});
             const { accessToken, user } = res.data;
+            console.log(user);
 
-            if (!user.isVerified) {
-                console.log('帳號尚未驗證，請先進行驗證');
-                setTimeout(() => navigate('/verify'), 1500);
-            } else {
-                console.log('帳號已驗證');
-            }
+            // if (!user.isVerified) {
+            //     console.log('帳號尚未驗證，請先進行驗證');
+            //     setTimeout(() => navigate('/verify'), 1500);
+            // } else {
+            //     console.log('帳號已驗證');
+            // }
 
+
+            localStorage.setItem('user_info', JSON.stringify(user));
             //將token存入localStorage
             localStorage.setItem('token', accessToken);
-
             setToken(accessToken);
             setUser(user);
 
-            console.log('登入成功!');
+            console.log('登入成功!', accessToken);
             setTimeout(() => {
                 navigate('/', { state: { username: user.username, email: user.email } })
             }, 1500);

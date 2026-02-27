@@ -14,73 +14,93 @@ import {
 } from 'lucide-react';
 
 
-const mockAxiosClient = {
-  // 模擬取得訂單列表
-  getOrders: async () => {
-    await new Promise(resolve => setTimeout(resolve, 600));
-    return {
-      data: {
-        orders: [
-          {
-            id: "c8c3b4f0-7c12-4e9b-a0d1-88c92bdf7d12",
-            orderNo: "ZON-20260226-0001",
-            merchantOrderNo: "NEWEBPAY1234567890",
-            userId: 3,
-            amount: 1268,
-            status: "PAID",
-            createdAt: "2026-02-26T10:00:00.000Z",
-            paidAt: "2026-02-26T10:01:00.000Z"
-          },
-          {
-            id: "d9e4c5f1-8d23-5f0c-b1e2-99d03cef8e23",
-            orderNo: "ZON-20260226-0002",
-            merchantOrderNo: "NEWEBPAY0987654321",
-            userId: 3,
-            amount: 2500,
-            status: "PENDING",
-            createdAt: "2026-02-26T11:30:00.000Z",
-            paidAt: null
-          }
-        ]
-      }
-    };
-  },
-  // 模擬取得訂單詳細商品資訊
-  getOrderItems: async (orderId) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return {
-      data: {
-        orderItems: [
-          {
-            id: "oi-10001",
-            orderId: orderId,
-            productId: 101,
-            name: "麻辣燙湯底方塊2包-獨家配方",
-            price: 899,
-            quantity: 1,
-            subtotal: 899
-          },
-          {
-            id: "oi-10002",
-            orderId: orderId,
-            productId: 102,
-            name: "寵愛營養配方貓飼料2包-獨家配方",
-            price: 369,
-            quantity: 1,
-            subtotal: 369
-          }
-        ]
-      }
-    };
-  }
-};
+// const mockAxiosClient = {
+//   // 模擬取得訂單列表
+//   getOrders: async () => {
+//     await new Promise(resolve => setTimeout(resolve, 600));
+//     return {
+//       data: {
+//         orders: [
+//           {
+//             id: "c8c3b4f0-7c12-4e9b-a0d1-88c92bdf7d12",
+//             orderNo: "ZON-20260226-0001",
+//             merchantOrderNo: "NEWEBPAY1234567890",
+//             userId: 3,
+//             amount: 1268,
+//             status: "PAID",
+//             createdAt: "2026-02-26T10:00:00.000Z",
+//             paidAt: "2026-02-26T10:01:00.000Z"
+//           },
+//           {
+//             id: "d9e4c5f1-8d23-5f0c-b1e2-99d03cef8e23",
+//             orderNo: "ZON-20260226-0002",
+//             merchantOrderNo: "NEWEBPAY0987654321",
+//             userId: 3,
+//             amount: 2500,
+//             status: "PENDING",
+//             createdAt: "2026-02-26T11:30:00.000Z",
+//             paidAt: null
+//           }
+//         ]
+//       }
+//     };
+//   },
+//   // 模擬取得訂單詳細商品資訊
+//   getOrderItems: async (orderId) => {
+//     await new Promise(resolve => setTimeout(resolve, 500));
+//     return {
+//       data: {
+//         orderItems: [
+//           {
+//             id: "oi-10001",
+//             orderId: orderId,
+//             productId: 101,
+//             name: "麻辣燙湯底方塊2包-獨家配方",
+//             price: 899,
+//             quantity: 1,
+//             subtotal: 899
+//           },
+//           {
+//             id: "oi-10002",
+//             orderId: orderId,
+//             productId: 102,
+//             name: "寵愛營養配方貓飼料2包-獨家配方",
+//             price: 369,
+//             quantity: 1,
+//             subtotal: 369
+//           }
+//         ]
+//       }
+//     };
+//   }
+// };
 
 
-export default function MemberCenter({ user }) {
+export default function MemberCenter({ user, orderData }) {
     const location = useLocation();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    // 從localStorage取得user資料
+    const savedUser = JSON.parse(localStorage.getItem('user_info'));
+    const displayUser = savedUser || user;
+
+    // 檢查是否已登入
+    const { username, email } = user;
+    console.log(username, email);
+
+    // 取得訂單資訊
+    console.log(orderData);
+    // const {
+    //     id,
+    //     merchantOrderNo,
+    //     subtotal,
+    //     total,
+    //     createdAt,
+    //     paidAt
+    // } = orderData;
+
 
     //登入後取得user資訊
     // const isUser = location.state?.user || user;
@@ -107,17 +127,86 @@ export default function MemberCenter({ user }) {
     //     }
     // }, [userName, userEmail]);
 
-    const userData = {
-        username: "Wuguji",
-        email: "wuguji@example.com"
-    };
+    useEffect(() => {
+        const fetchLocalOrders = () => {
+            try {
+                setLoading(true);
+                
+                // 從localStorage取得訂單資料
+                const savedOrder = localStorage.getItem('all_orders');
+                
+                if (savedOrder) {
+                    // 解析JSON字串
+                    const parsedOrders = JSON.parse(savedOrder);
+                    
+                    // // 先將原始日期字串轉為時間物件，再轉為毫秒整數
+                    // const paidAtSource = orders.paidAt || new Date().toISOString();
+                    // const paidAtInteger = new Date(paidAtSource).getTime();
+                    
+                    // const formattedOrders = parsedOrders.map(order => ({
+                    //     id: order.id || Math.floor(Date.now() + Math.random() * 1000),
+                    //     orderNo: order.orderNo || 'NEWPAY-' + Date.now(),
+                    //     amount: order.total || 0,
+                    //     total: order.total || 0,
+                    //     status: order.status || 'PAID',
+                    //     createdAt: order.CreatedAt || new Date().toISOString(),
+                    //     paidAt: paidAtInteger,
+                    //     items: order.items || []
+                    // }));
+
+                    const formattedOrders = parsedOrders.map((order, index) => {
+                        // 確保 id 絕對唯一且為整數 (結合時間戳記、索引與隨機數)
+                        const uniqueId = order.id || Math.floor(Date.now() + index + Math.random() * 1000);
+
+                        // 確保付款方式編號 (orderNo) 唯一，並維持 "NEWPAY-" 前綴
+                        // 透過加入 index 確保同一毫秒產生的編號不重複
+                        const uniqueOrderNo = order.orderNo || `NEWPAY-${Date.now() + index}`;
+
+                        // 處理 paidAt：轉為唯一整數
+                        // 取得原始時間戳記並加上 index 位移，確保整數值的唯一性
+                        const rawPaidAt = order.paidAt || new Date().toISOString();
+                        const uniquePaidAtInteger = new Date(rawPaidAt).getTime() + index;
+
+                        return {
+                            id: uniqueId || Math.floor(Date.now() + Math.random() * 1000),
+                            orderNo: uniqueOrderNo || 'NEWPAY-' + Date.now(),
+                            amount: order.total || 0,
+                            total: order.total || 0,
+                            status: order.status || 'PAID',
+                            createdAt: order.CreatedAt || new Date().toISOString(),
+                            paidAt: uniquePaidAtInteger,
+                            items: order.items || [],
+                            //從localStorage取得收件人資訊
+                            receiverName: order.receiverName || '未提供',
+                            phone: order.phone || '未提供',
+                            email: order.email || '未提供',
+                            address: order.address || '未提供'
+                        }
+                    });
+
+                    // // 設定狀態，這裡我們只放這一筆從 local 拿到的資料
+                    // setOrders([formattedOrder]); 
+
+                    // 設定完整的訂單列表
+                    setOrders(formattedOrders);
+                } else {
+                    setOrders([]); // 若無資料則為空
+                }
+            } catch (err) {
+                console.error("讀取本地訂單失敗:", err);
+                setError('無法載入本地訂單資料');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchLocalOrders();
+    }, []);
 
     const getOrderData = async () => {
         try {
             setLoading(true);
-            const res = await mockAxiosClient.getOrders();
-            console.log('成功取得訂單資訊', res.data.orders || []);
-            setOrders(res.data.orders);
+            window.location.reload();
         } catch (error) {
             console.log(error.response?.data?.message || '無法取得訂單資訊');
         } finally {
@@ -125,19 +214,24 @@ export default function MemberCenter({ user }) {
         }
     }
 
-    useEffect(() => {
-        getOrderData();
-    }, []);
+    // useEffect(() => {
+    //     getOrderData();
+    // }, []);
 
 
     // 處理查看詳情點擊
     const handleViewDetails = async (order) => {
-        setSelectedOrder(order);
+        setSelectedOrder(order); // 設定當前選中的訂單物件
         setShowModal(true);
         setDetailLoading(true);
-        try {
-        const res = await mockAxiosClient.getOrderItems(order.id);
-        setOrderItems(res.data.orderItems || []);
+        try {   
+        // 從該筆訂單中提取 items 陣列進行渲染
+        if (order.items && order.items.length > 0) {
+            setOrderItems(order.items);
+        } else {
+            setOrderItems([]); // 若無商品則清空，避免顯示舊資料
+        }
+        // const res = await mockAxiosClient.getOrderItems(order.id);
         } catch (err) {
         console.error("無法取得商品資訊");
         } finally {
@@ -181,6 +275,52 @@ export default function MemberCenter({ user }) {
         }
     };
 
+
+    const handleClearOrders = () => {
+        // 彈出確認視窗，避免誤刪
+        if (window.confirm('確定要清除所有訂單紀錄嗎？此動作無法復原。')) {
+            try {
+                // 移除localStorage資料
+                localStorage.removeItem('all_orders');
+                
+                // 同步更新React狀態，讓畫面立即變回「目前尚無訂單紀錄」
+                setOrders([]);
+                
+                alert('訂單紀錄已成功清除');
+            } catch (err) {
+                console.error("清除訂單失敗:", err);
+                alert('清除失敗，請稍後再試');
+            }
+        }
+    };
+
+    const handleDeleteSingleOrder = (orderId) => {
+        if (window.confirm('確定要刪除這筆訂單紀錄嗎？')) {
+            try {
+                // 從 localStorage 取得目前所有訂單
+                const existingOrders = JSON.parse(localStorage.getItem('all_orders')) || [];
+                
+                // 過濾掉該筆 ID 的訂單
+                // 注意：如果 id 在格式化時改變了，建議比對原始的 orderNo 或 merchantOrderNo
+                const updatedOrders = existingOrders.filter(order => 
+                    (order.id || order.merchantOrderNo) !== orderId
+                );
+
+                // 更新 localStorage
+                localStorage.setItem('all_orders', JSON.stringify(updatedOrders));
+
+                // 更新畫面狀態並關閉 Modal
+                setOrders(prev => prev.filter(o => o.id !== orderId));
+                setShowModal(false);
+                
+                alert('訂單已刪除');
+            } catch (err) {
+                console.error("刪除失敗:", err);
+                alert('刪除失敗，請稍後再試');
+            }
+        }
+    };
+
     return (
         <>
             <div className='h-100 bg-light d-flex justify-content-center align-items-center py-5 py-md-8' style={{ background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)" }}>
@@ -192,8 +332,8 @@ export default function MemberCenter({ user }) {
                         </div>
 
                         <div className="card-body">
-                            <h3>歡迎回來, {userData?.username}</h3>
-                            <p>Email: {userData?.email}</p>
+                            <h3>歡迎回來, {displayUser.username || '老朋友' }</h3>
+                            <p>Email: {displayUser.email || 'test@test.com'}</p>
                             <div className="d-flex align-items-center text-secondary">
                                 <div className="bg-primary rounded-circle flex-shrink-0 me-3" style={{ width: '8px', height: '8px' }}></div>
                                 <p className="mb-0">這是您的專屬管理頁面，您可以查看所有歷史交易紀錄。</p>
@@ -208,12 +348,29 @@ export default function MemberCenter({ user }) {
                             <Package size={20} className="me-2 text-white" />
                             <h5 className="mb-0 h4 fw-semibold">最近訂單資訊</h5>
                             </div>
-                            <button 
+                            {/* <button 
                             onClick={getOrderData}
-                            className="btn btn-link btn-sm text-decoration-none fw-bold"
+                            className="btn btn-link btn-sm border border-white text-white text-decoration-none fw-bold"
                             >
                             重新整理
-                            </button>
+                            </button> */}
+                            <div className="d-flex gap-2"> {/* 使用容器包裹多個按鈕 */}
+                                <button 
+                                    onClick={getOrderData}
+                                    className="btn btn-outline-light btn-sm rounded-pill fw-bold"
+                                    style={{ fontSize: '12px' }}
+                                >
+                                    重新整理
+                                </button>
+                                {/* 新增的清除按鈕 */}
+                                <button 
+                                    onClick={handleClearOrders}
+                                    className="btn btn-outline-light btn-sm fw-bold rounded-pill px-3"
+                                    style={{ fontSize: '12px' }}
+                                >
+                                    清除紀錄
+                                </button>
+                            </div>
                         </div>
 
                         <div className="card-body p-0">
@@ -248,7 +405,19 @@ export default function MemberCenter({ user }) {
                                     {orders.map((order) => (
                                     <tr key={order.id}>
                                         <td className="ps-4 py-3">
-                                        <div className="fw-bold text-dark">{order.orderNo}</div>
+                                                
+
+
+
+
+
+
+
+
+
+
+
+                                                <div className="fw-bold text-dark">{`ZNM-${order.orderNo}`}</div>
                                         <div className="small text-muted d-flex align-items-center mt-1">
                                             <Calendar size={12} className="me-1" />
                                             {formatDate(order.createdAt)}
@@ -256,13 +425,13 @@ export default function MemberCenter({ user }) {
                                         </td>
                                         <td className="py-3">
                                         <code className="bg-gray-50 text-primary-900 px-2 py-1 rounded small border-0">
-                                            {order.merchantOrderNo}
+                                            {`NEWPAY-${order.paidAt}`}
                                         </code>
                                         </td>
                                         <td className="py-3 text-end">
                                         <div className="fw-bold text-primary d-flex align-items-center justify-content-center">
                                             <CreditCard size={14} className="me-1" />
-                                            ${order.amount.toLocaleString()}
+                                            ${order.amount}
                                         </div>
                                         </td>
                                         <td className="py-3 text-center">
@@ -308,13 +477,13 @@ export default function MemberCenter({ user }) {
                                         <div className="col-md-6">
                                             <div className="p-3 bg-gray-50 rounded-3 h-100">
                                                 <small className="text-muted d-block mb-1">訂單編號</small>
-                                                <span className="fw-bold text-dark">{selectedOrder.orderNo}</span>
+                                                <span className="fw-bold text-dark">{`ZNM-${selectedOrder.orderNo}`}</span>
                                             </div>
                                         </div>
                                         <div className="col-md-6">
                                             <div className="p-3 bg-gray-50 rounded-3 h-100">
                                                 <small className="text-muted d-block mb-1">交易序號 (藍新)</small>
-                                                <code className="text-dark">{selectedOrder.merchantOrderNo}</code>
+                                                <code className="text-dark">{`NEWPAY-${selectedOrder.paidAt}`}</code>
                                             </div>
                                         </div>
                                         <div className="col-md-4 pt-md-2">
@@ -325,64 +494,98 @@ export default function MemberCenter({ user }) {
                                             <small className="text-muted d-block px-2">付款時間</small>
                                             <div className="small px-2">{formatDate(selectedOrder.paidAt)}</div>
                                         </div>
-                                        <div className="col-md-4 pt-md-2">
-                                            <small className="text-muted d-block px-2 mb-1">訂單狀態</small>
-                                            <div className='px-2'>{getStatusBadge(selectedOrder.status)}</div>
-                                        </div>
-                                    </div>
-
-                                    {/* 商品清單 */}
-                                    <div className="border rounded-3 overflow-hidden">
-                                        <div className="bg-gray-50 px-3 py-4 border-bottom d-flex align-items-center">
-                                            <ShoppingBag size={16} className="me-2 text-primary" />
-                                            <span className="fw-bold small">購買商品清單</span>
+                                            <div className="col-md-4 pt-md-2">
+                                                <small className="text-muted d-block px-2 mb-1">訂單狀態</small>
+                                                <div className='px-2'>{getStatusBadge(selectedOrder.status)}</div>
+                                            </div>
                                         </div>
                                         
-                                        {detailLoading ? (
-                                            <div className="p-5 text-center">
-                                                <div className="spinner-border spinner-border-sm text-primary" role="status"></div>
+
+                                        {/* 收件人資訊 */}
+                                        <div className="mb-4">
+                                            <div className="bg-primary-50 px-3 py-2 border-primary mb-3 rounded-2">
+                                                <span className="fw-bold small text-primary-800">收件資訊</span>
                                             </div>
-                                            ) : (
-                                            <div className="table-responsive">
-                                                <table className="table table-sm mb-0 align-middle">
-                                                <thead className="bg-white">
-                                                    <tr className="small text-secondary">
-                                                    <th className="ps-3 py-2">商品名稱</th>
-                                                    <th className="py-2 text-center">單價</th>
-                                                    <th className="py-2 text-center">數量</th>
-                                                    <th className="pe-3 py-2 text-end">小計</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {orderItems.map((item) => (
-                                                    <tr key={item.id}>
-                                                        <td className="ps-3 py-3">
-                                                            <div className="small fw-bold">{item.name}</div>
-                                                            <div className="text-muted" style={{ fontSize: '10px' }}>ID: {item.productId}</div>
-                                                        </td>
-                                                        <td className="py-3 text-center small">${item.price.toLocaleString()}</td>
-                                                        <td className="py-3 text-center small">{item.quantity}</td>
-                                                        <td className="pe-3 py-3 text-end fw-bold text-dark">${item.subtotal.toLocaleString()}</td>
-                                                    </tr>
-                                                    ))}
-                                                </tbody>
-                                                <tfoot className="table-secondary">
-                                                    <tr>
-                                                        <td colSpan="3" className="ps-3 fw-bold text-end">總計金額</td>
-                                                        <td className="pe-3 text-end fw-bold text-primary h5 py-2 mb-0">${selectedOrder.amount.toLocaleString()}</td>
-                                                    </tr>
-                                                </tfoot>
-                                                </table>
+                                            <div className="row g-3 px-2 text-primary">
+                                                <div className="col-md-6">
+                                                    <small className="text-muted d-block">收件人姓名</small>
+                                                    <div className="fw-medium">{selectedOrder.receiverName}</div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <small className="text-muted d-block">連絡電話</small>
+                                                    <div className="fw-medium">{selectedOrder.phone}</div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <small className="text-muted d-block">電子信箱</small>
+                                                    <div className="fw-medium">{selectedOrder.email}</div>
+                                                </div>
+                                                <div className="col-md-6">
+                                                    <small className="text-muted d-block">配送地址</small>
+                                                    <div className="fw-medium">{selectedOrder.address}</div>
+                                                </div>
                                             </div>
-                                        )}
-                                    </div>
+                                        </div>
+
+                                        {/* 商品清單 */}
+                                        <div className="border rounded-3 overflow-hidden">
+                                            <div className="bg-gray-50 px-3 py-4 border-bottom d-flex align-items-center">
+                                                <ShoppingBag size={16} className="me-2 text-primary" />
+                                                <span className="fw-bold small">購買商品清單</span>
+                                            </div>
+                                            
+                                            {detailLoading ? (
+                                                <div className="p-5 text-center">
+                                                    <div className="spinner-border spinner-border-sm text-primary" role="status"></div>
+                                                </div>
+                                                ) : (
+                                                <div className="table-responsive">
+                                                    <table className="table table-sm mb-0 align-middle">
+                                                    <thead className="bg-white">
+                                                        <tr className="small text-secondary">
+                                                        <th className="ps-3 py-2">商品名稱</th>
+                                                        <th className="py-2 text-center">單價</th>
+                                                        <th className="py-2 text-center">數量</th>
+                                                        <th className="pe-3 py-2 text-end">小計</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {orderItems.map((item) => (
+                                                            <tr key={item.id}>
+                                                                <td className="ps-3 py-3">
+                                                                    <div className="small fw-bold">{item.title}</div>
+                                                                    <div className="text-muted" style={{ fontSize: '10px' }}>ID: {item.id}</div>
+                                                                </td>
+                                                                <td className="py-3 text-center small">${item.price}</td>
+                                                                    <td className="py-3 text-center small">{item.quantity}</td>
+                                                                <td className="pe-3 py-3 text-end fw-bold text-dark">${item.quantity * item.price}</td>
+                                                            {/* <td className="pe-3 py-3 text-end fw-bold text-dark">${item.subtotal}</td> */}
+                                                        </tr>
+                                                        ))}
+                                                    </tbody>
+                                                    <tfoot className="table-secondary">
+                                                        <tr>
+                                                            <td colSpan="3" className="ps-3 fw-bold text-end">總計金額</td>
+                                                            <td className="pe-3 text-end fw-bold text-primary h5 py-2 mb-0">${selectedOrder?.amount?.toLocaleString()}</td>
+                                                        </tr>
+                                                    </tfoot>
+                                                    </table>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
 
                                     <div className="modal-footer border-0 p-4 pt-0">
-                                    <button type="button" className="btn btn-secondary px-4 rounded-pill" onClick={() => setShowModal(false)}>關閉</button>
-                                    {selectedOrder.status === 'PAID' && (
-                                        <button type="button" className="btn btn-primary px-4 rounded-pill">下載發票</button>
-                                    )}
+                                        <button 
+                                            type="button" 
+                                            className="btn btn-outline-danger px-4 rounded-pill"
+                                            onClick={() => handleDeleteSingleOrder(selectedOrder.id)}
+                                        >
+                                            刪除此紀錄
+                                        </button>
+                                        <button type="button" className="btn btn-secondary px-4 rounded-pill" onClick={() => setShowModal(false)}>關閉</button>
+                                        {/* {selectedOrder.status === 'PAID' && (
+                                            <button type="button" className="btn btn-primary px-4 rounded-pill">下載發票</button>
+                                        )} */}
                                     </div>
                                 </div>
                             </div>

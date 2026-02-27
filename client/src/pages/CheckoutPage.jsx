@@ -3,13 +3,40 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { CircleCheckBig, ArrowLeft, CreditCard, Loader2 } from 'lucide-react';
 import { useCart } from '../context/CartContext'; // 引入 useCart
 
-export default function CheckoutPage({ formData, setFormData, merchantOrderNo }) {
+export default function CheckoutPage({ formData, setFormData, merchantOrderNo, setOrderData, onReset }) {
     const navigate = useNavigate();
     const location = useLocation();
     const { clearCart } = useCart(); // 取得清空購物車方法
     
     // 防呆保護：如果沒有資料，給予預設值避免崩潰
     const getOrderData = location.state?.orderData || { subtotal: 0, shippingFee: 0, total: 0 };
+    const { items, shippingFee, subtotal, total, CreatedAt } = getOrderData;
+    // console.log(items, shippingFee, subtotal, total, CreatedAt);
+
+    const paidAt = new Date();
+    // const [finalOrder, setFinalOrder] = useState({});
+    
+    // useEffect(() => {
+    //     if (getOrderData) {
+    //         setFinalOrder({
+    //             ...getOrderData,
+    //             paidAt: new Date().toISOString()
+    //         });
+    //     }
+    //     console.log(finalOrder);
+    // }, [getOrderData]); // 只有當訂單資料變動時才更新
+
+    const finalOrderData = {
+        ...getOrderData,
+        orderNo: merchantOrderNo,
+        paidAt: new Date().toISOString(),
+        status: 'PAID',
+        receiverName: formData.receiverName, // 確保formData被帶走
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+    };
+
     
     const [isSubmitting, setIsSubmitting] = useState(false);
  
@@ -19,8 +46,24 @@ export default function CheckoutPage({ formData, setFormData, merchantOrderNo })
         try {
             setTimeout(() => {
                 setIsSubmitting(false);
-                clearCart(); // 結帳成功，清空購物車
-                navigate('/payment-complete', { state: { getOrderData } });
+                //暫時將訂單內容存入localStorage，讓會員中心可以使用
+
+                // 先取出舊的訂單清單（如果沒有就給空陣列）
+                const existingOrders = JSON.parse(localStorage.getItem('all_orders')) || [];
+            
+                // 將當前新訂單加入陣列的最前面
+                const updatedOrders = [finalOrderData, ...existingOrders];
+
+                // 將整個陣列存回 localStorage (使用新的 Key: 'all_orders')
+                localStorage.setItem('all_orders', JSON.stringify(updatedOrders));
+
+
+                // localStorage.setItem('order', JSON.stringify(finalOrderData));
+                setOrderData(finalOrderData);
+                console.log(finalOrderData);
+                onReset();
+                // clearCart(); // 結帳成功，清空購物車
+                navigate('/payment-complete', { state: { getOrderData, orderFinal: finalOrderData, purchaseInfo: formData } });
             }, 1500);
         } catch (err) {
             setIsSubmitting(false);
@@ -69,7 +112,7 @@ export default function CheckoutPage({ formData, setFormData, merchantOrderNo })
                                         <div className="form-row d-flex justify-content-between gap-4 pt-4">
                                             <div className="form-group col-md-5 mb-3 mb-md-4">
                                                 <label className="small font-weight-bold text-muted mb-2">收件姓名</label>
-                                                <input required className="form-control py-2" value={formData.receiverName} onChange={e => setFormData({ ...formData, receiverName: e.target.value })} placeholder="請輸入姓名" />
+                                                <input required className="form-control py-2" value={formData.receiverName.toLocaleString()} onChange={e => setFormData({ ...formData, receiverName: e.target.value })} placeholder="請輸入姓名" />
                                             </div>
                                             <div className="form-group col-md-5">
                                                 <label className="small font-weight-bold text-muted mb-2">連絡電話</label>
