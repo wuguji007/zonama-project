@@ -107,7 +107,7 @@ export default function MemberCenter({ user, orderData }) {
     // const userName = location.state?.user.username || user.username;
     // const userEmail = location.state?.email || user.email;
 
-    // 詳情視窗狀態
+    // 訂單明細狀態
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [orderItems, setOrderItems] = useState([]);
     const [detailLoading, setDetailLoading] = useState(false);
@@ -138,22 +138,8 @@ export default function MemberCenter({ user, orderData }) {
                 if (savedOrder) {
                     // 解析JSON字串
                     const parsedOrders = JSON.parse(savedOrder);
-                    
-                    // // 先將原始日期字串轉為時間物件，再轉為毫秒整數
-                    // const paidAtSource = orders.paidAt || new Date().toISOString();
-                    // const paidAtInteger = new Date(paidAtSource).getTime();
-                    
-                    // const formattedOrders = parsedOrders.map(order => ({
-                    //     id: order.id || Math.floor(Date.now() + Math.random() * 1000),
-                    //     orderNo: order.orderNo || 'NEWPAY-' + Date.now(),
-                    //     amount: order.total || 0,
-                    //     total: order.total || 0,
-                    //     status: order.status || 'PAID',
-                    //     createdAt: order.CreatedAt || new Date().toISOString(),
-                    //     paidAt: paidAtInteger,
-                    //     items: order.items || []
-                    // }));
 
+                    // 格式化訂單資訊
                     const formattedOrders = parsedOrders.map((order, index) => {
                         // 確保 id 絕對唯一且為整數 (結合時間戳記、索引與隨機數)
                         const uniqueId = order.id || Math.floor(Date.now() + index + Math.random() * 1000);
@@ -176,6 +162,7 @@ export default function MemberCenter({ user, orderData }) {
                             createdAt: order.CreatedAt || new Date().toISOString(),
                             paidAt: uniquePaidAtInteger,
                             items: order.items || [],
+                            shippingFee: order.shippingFee || 0,
                             //從localStorage取得收件人資訊
                             receiverName: order.receiverName || '未提供',
                             phone: order.phone || '未提供',
@@ -375,81 +362,69 @@ export default function MemberCenter({ user, orderData }) {
 
                         <div className="card-body p-0">
                             {loading ? (
-                            <div className="py-5 text-center">
-                                <div className="spinner-border text-primary" role="status">
-                                <span className="visually-hidden">Loading...</span>
+                                <div className="py-5 text-center">
+                                    <div className="spinner-border text-primary" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p className="mt-3 text-muted">正在獲取訂單資訊...</p>
                                 </div>
-                                <p className="mt-3 text-muted">正在獲取訂單資訊...</p>
-                            </div>
-                            ) : error ? (
-                            <div className="py-5 text-center text-danger">
-                                {error}
-                            </div>
-                            ) : orders.length === 0 ? (
-                            <div className="py-5 text-center text-muted fst-italic">
-                                目前尚無訂單紀錄。
-                            </div>
-                            ) : (
-                            <div className="table-responsive">
-                                <table className="table table-hover align-middle mb-0">
-                                <thead className="bg-gray-50">
-                                    <tr>
-                                    <th className="ps-4 py-3 text-secondary small fw-bold">訂單編號 / 日期</th>
-                                    <th className="py-3 text-secondary small fw-bold">付款方式編號</th>
-                                    <th className="py-3 text-secondary small fw-bold text-center">金額</th>
-                                    <th className="py-3 text-secondary small fw-bold text-center">狀態</th>
-                                    <th className="pe-4 py-3"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {orders.map((order) => (
-                                    <tr key={order.id}>
-                                        <td className="ps-4 py-3">
-                                                
-
-
-
-
-
-
-
-
-
-
-
-                                                <div className="fw-bold text-dark">{`ZNM-${order.orderNo}`}</div>
-                                        <div className="small text-muted d-flex align-items-center mt-1">
-                                            <Calendar size={12} className="me-1" />
-                                            {formatDate(order.createdAt)}
-                                        </div>
-                                        </td>
-                                        <td className="py-3">
-                                        <code className="bg-gray-50 text-primary-900 px-2 py-1 rounded small border-0">
-                                            {`NEWPAY-${order.paidAt}`}
-                                        </code>
-                                        </td>
-                                        <td className="py-3 text-end">
-                                        <div className="fw-bold text-primary d-flex align-items-center justify-content-center">
-                                            <CreditCard size={14} className="me-1" />
-                                            ${order.amount}
-                                        </div>
-                                        </td>
-                                        <td className="py-3 text-center">
-                                        {getStatusBadge(order.status)}
-                                        </td>
-                                        <td className="pe-4 py-3 text-end">
-                                                <button
-                                                    onClick={() => handleViewDetails(order)}
-                                                    className="btn btn-sm btn-primary border-0 text-white"
-                                                >
-                                            <ChevronRight size={18} />
-                                        </button>
-                                        </td>
-                                    </tr>
-                                    ))}
-                                </tbody>
-                                </table>
-                            </div>
+                                ) : error ? (
+                                <div className="py-5 text-center text-danger">
+                                    {error}
+                                </div>
+                                ) : orders.length === 0 ? (
+                                <div className="py-5 text-center text-muted fst-italic">
+                                    目前尚無訂單紀錄。
+                                </div>
+                                ) : (
+                                <div className="table-responsive">
+                                    <table className="table table-hover align-middle mb-0">
+                                        <thead className="bg-gray-50">
+                                            <tr>
+                                            <th className="ps-4 py-3 text-secondary small fw-bold">訂單編號 / 日期</th>
+                                            <th className="py-3 text-secondary small fw-bold">付款方式編號</th>
+                                            <th className="py-3 text-secondary small fw-bold text-center">金額</th>
+                                            <th className="py-3 text-secondary small fw-bold text-center">狀態</th>
+                                            <th className="pe-4 py-3"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {orders.map((order) => (
+                                            <tr key={order.id}>
+                                                <td className="ps-4 py-3">                                                
+                                                    <div className="fw-bold text-dark">{`ZNM-${order.orderNo}`}</div>
+                                                    <div className="small text-muted d-flex align-items-center mt-1">
+                                                        <Calendar size={12} className="me-1" />
+                                                        {formatDate(order.createdAt)}
+                                                    </div>
+                                                </td>
+                                                <td className="py-3">
+                                                    <code className="bg-gray-50 text-primary-900 px-2 py-1 rounded small border-0">
+                                                        {`NEWPAY-${order.paidAt}`}
+                                                    </code>
+                                                </td>
+                                                <td className="py-3 text-end">
+                                                    <div className="fw-bold text-primary d-flex align-items-center justify-content-center">
+                                                        <CreditCard size={14} className="me-1" />
+                                                        ${order.amount}
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 text-center">
+                                                {getStatusBadge(order.status)}
+                                                </td>                                               
+                                                    <td className="pe-4 py-3 text-end">
+                                                        <button
+                                                            onClick={() => handleViewDetails(order)}
+                                                            className="btn btn-sm btn-primary border-0 text-white"
+                                                        >
+                                                    <ChevronRight size={18} />
+                                                </button>
+                                                </td>
+                                            </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             )}
                         </div>
                     
@@ -458,21 +433,21 @@ export default function MemberCenter({ user, orderData }) {
                         </div>
                     </div>
 
-                    {/* 訂單詳情彈窗 (Bootstrap Modal) */}
+                    {/* 訂單詳情Modal(Bootstrap Modal) */}
                     {showModal && selectedOrder && (
                         <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
                             <div className="modal-dialog modal-lg modal-dialog-centered">
                                 <div className="modal-content border-0 shadow-lg rounded-4">
                                     <div className="modal-header bg-primary-100 border-0 py-3 px-4">
-                                    <h5 className="modal-title text-primary-800 fw-bold d-flex align-items-center">
-                                        <Info size={20} className="me-2 text-primary" />
-                                        訂單詳細資訊
-                                    </h5>
-                                    <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                                        <h5 className="modal-title text-primary-800 fw-bold d-flex align-items-center">
+                                            <Info size={20} className="me-2 text-primary" />
+                                            訂單詳細資訊
+                                        </h5>
+                                        <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                                     </div>
                                     
                                     <div className="modal-body p-4">
-                                    {/* 訂單摘要 */}
+                                    {/* 訂單摘要summary */}
                                     <div className="row g-3 mb-4">
                                         <div className="col-md-6">
                                             <div className="p-3 bg-gray-50 rounded-3 h-100">
@@ -537,38 +512,52 @@ export default function MemberCenter({ user, orderData }) {
                                                 <div className="p-5 text-center">
                                                     <div className="spinner-border spinner-border-sm text-primary" role="status"></div>
                                                 </div>
-                                                ) : (
-                                                <div className="table-responsive">
-                                                    <table className="table table-sm mb-0 align-middle">
-                                                    <thead className="bg-white">
-                                                        <tr className="small text-secondary">
-                                                        <th className="ps-3 py-2">商品名稱</th>
-                                                        <th className="py-2 text-center">單價</th>
-                                                        <th className="py-2 text-center">數量</th>
-                                                        <th className="pe-3 py-2 text-end">小計</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {orderItems.map((item) => (
-                                                            <tr key={item.id}>
-                                                                <td className="ps-3 py-3">
-                                                                    <div className="small fw-bold">{item.title}</div>
-                                                                    <div className="text-muted" style={{ fontSize: '10px' }}>ID: {item.id}</div>
-                                                                </td>
-                                                                <td className="py-3 text-center small">${item.price}</td>
-                                                                    <td className="py-3 text-center small">{item.quantity}</td>
-                                                                <td className="pe-3 py-3 text-end fw-bold text-dark">${item.quantity * item.price}</td>
-                                                            {/* <td className="pe-3 py-3 text-end fw-bold text-dark">${item.subtotal}</td> */}
-                                                        </tr>
-                                                        ))}
-                                                    </tbody>
-                                                    <tfoot className="table-secondary">
-                                                        <tr>
-                                                            <td colSpan="3" className="ps-3 fw-bold text-end">總計金額</td>
-                                                            <td className="pe-3 text-end fw-bold text-primary h5 py-2 mb-0">${selectedOrder?.amount?.toLocaleString()}</td>
-                                                        </tr>
-                                                    </tfoot>
-                                                    </table>
+                                                ) : (                                                
+                                                    <div className="table-responsive">
+                                                        <table className="table table-sm mb-0 align-middle">
+                                                            <thead className="bg-white">
+                                                                <tr className="small text-secondary">
+                                                                    <th className="ps-3 py-2">商品名稱</th>
+                                                                    <th className="py-2 text-end">單價</th>
+                                                                    <th className="py-2 text-end">數量</th>
+                                                                    <th className="pe-3 py-2 text-end">小計</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {orderItems.map((item) => (
+                                                                    <tr key={item.id}>
+                                                                        <td className="ps-3 py-3">
+                                                                            <div className="small fw-bold">{item.title}</div>
+                                                                            <div className="text-muted" style={{ fontSize: '10px' }}>ID: {item.id}</div>
+                                                                        </td>
+                                                                        <td className="py-3 text-end small">${item.price}</td>
+                                                                        <td className="py-3 text-end small">{item.quantity}</td>
+                                                                        <td className="pe-3 py-3 text-end fw-bold text-dark">${item.quantity * item.price}</td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                                                                        
+                                                                <tfoot className="table-secondary">
+                                                                    {/* 第一列：運費 */}
+                                                                    <tr>
+                                                                        <td colSpan="3" className="ps-3 text-end text-gray-900 small">運費</td>
+                                                                        <td className="pe-3 text-end text-muted small">
+                                                                            {selectedOrder.shippingFee === 0 ? '免運' : `$${selectedOrder.shippingFee}`}
+                                                                        </td>
+                                                                    </tr>
+                                                                    {/* 第二列：總計 */}
+                                                                    <tr>
+                                                                        <td colSpan="3" className="ps-3 fw-bold text-end">總計金額</td>
+                                                                        <td className="pe-3 text-end fw-bold text-primary h5 py-2 mb-0">
+                                                                            ${selectedOrder?.total?.toLocaleString()}
+                                                                        </td>
+                                                                    </tr>
+                                                                    {/* <tr>
+                                                                        <td colSpan="3" className="ps-3 fw-bold text-end">總計金額</td>
+                                                                        <td className="pe-3 text-end fw-bold text-primary h5 py-2 mb-0">${selectedOrder?.amount?.toLocaleString()}</td>
+                                                                    </tr> */}
+                                                                </tfoot>
+                                                        </table>
                                                 </div>
                                             )}
                                         </div>

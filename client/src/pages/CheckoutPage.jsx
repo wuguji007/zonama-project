@@ -35,6 +35,7 @@ export default function CheckoutPage({ formData, setFormData, merchantOrderNo, s
         email: formData.email,
         phone: formData.phone,
         address: formData.address,
+        shippingFee: shippingFee
     };
 
     
